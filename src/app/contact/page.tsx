@@ -4,6 +4,38 @@ import { motion } from 'framer-motion';
 import { useTheme } from '@/context/ThemeContext';
 import { Mail, MessageSquare, Twitter, Linkedin, Github, Send, MapPin, Phone, Clock, Youtube, Mail as Gmail, MessageCircle } from 'lucide-react';
 import { useState } from 'react';
+import { LucideIcon } from 'lucide-react';
+
+// Types
+interface ContactInfo {
+  title: string;
+  content: string;
+  icon: LucideIcon;
+}
+
+// Contact information data
+const contactInfo: ContactInfo[] = [
+  {
+    title: 'Email',
+    content: 'contact@olacrypt.com',
+    icon: Mail,
+  },
+  {
+    title: 'Phone',
+    content: '+1 (555) 123-4567',
+    icon: Phone,
+  },
+  {
+    title: 'Location',
+    content: 'Greenwich, United Kingdom',
+    icon: MapPin,
+  },
+  {
+    title: 'Response Time',
+    content: 'Within 24 hours',
+    icon: Clock,
+  },
+];
 
 export default function Contact() {
   const { theme } = useTheme();
@@ -47,222 +79,43 @@ export default function Contact() {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 container mx-auto px-4 py-12">
-        {/* Hero Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-12"
-        >
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Get in Touch
-          </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            Have a question or want to collaborate? I'd love to hear from you. Let's connect and build something amazing together.
-          </p>
-        </motion.div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
-          {/* Contact Information */}
+      <div className="container relative mx-auto px-4 py-16">
+        <div className="max-w-7xl mx-auto">
+          {/* Header */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
-            className="space-y-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-16"
           >
-            {/* Contact Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <motion.div
-                whileHover={{ y: -5 }}
-                className={`p-6 rounded-xl ${
-                  theme === 'dark'
-                    ? 'bg-white/5 border border-white/10'
-                    : 'bg-black/5 border border-black/10'
-                } backdrop-blur-sm`}
-              >
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="p-3 rounded-lg bg-[#FF8C00]/10">
-                    <Mail className="w-6 h-6 text-[#FF8C00]" />
-                  </div>
-                  <h3 className="text-lg font-semibold">Email</h3>
-                </div>
-                <p className="text-gray-600 dark:text-gray-400">
-                  contact@olacrypt.com
-                </p>
-              </motion.div>
-
-              <motion.div
-                whileHover={{ y: -5 }}
-                className={`p-6 rounded-xl ${
-                  theme === 'dark'
-                    ? 'bg-white/5 border border-white/10'
-                    : 'bg-black/5 border border-black/10'
-                } backdrop-blur-sm`}
-              >
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="p-3 rounded-lg bg-[#FF8C00]/10">
-                    <Phone className="w-6 h-6 text-[#FF8C00]" />
-                  </div>
-                  <h3 className="text-lg font-semibold">Phone</h3>
-                </div>
-                <p className="text-gray-600 dark:text-gray-400">
-                  +1 (555) 123-4567
-                </p>
-              </motion.div>
-
-              <motion.div
-                whileHover={{ y: -5 }}
-                className={`p-6 rounded-xl ${
-                  theme === 'dark'
-                    ? 'bg-white/5 border border-white/10'
-                    : 'bg-black/5 border border-black/10'
-                } backdrop-blur-sm`}
-              >
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="p-3 rounded-lg bg-[#FF8C00]/10">
-                    <MapPin className="w-6 h-6 text-[#FF8C00]" />
-                  </div>
-                  <h3 className="text-lg font-semibold">Location</h3>
-                </div>
-                <p className="text-gray-600 dark:text-gray-400">
-                  Greenwich, United Kingdom
-                </p>
-              </motion.div>
-
-              <motion.div
-                whileHover={{ y: -5 }}
-                className={`p-6 rounded-xl ${
-                  theme === 'dark'
-                    ? 'bg-white/5 border border-white/10'
-                    : 'bg-black/5 border border-black/10'
-                } backdrop-blur-sm`}
-              >
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="p-3 rounded-lg bg-[#FF8C00]/10">
-                    <Clock className="w-6 h-6 text-[#FF8C00]" />
-                  </div>
-                  <h3 className="text-lg font-semibold">Response Time</h3>
-                </div>
-                <p className="text-gray-600 dark:text-gray-400">
-                  Within 24 hours
-                </p>
-              </motion.div>
-            </div>
-
-            {/* Social Links */}
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold mb-4">Connect With Me</h3>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                <motion.a
-                  href="https://twitter.com/Ola_Crrypt"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ y: -5 }}
-                  className={`p-4 rounded-xl ${
-                    theme === 'dark'
-                      ? 'bg-white/5 border border-white/10'
-                      : 'bg-black/5 border border-black/10'
-                  } backdrop-blur-sm flex items-center gap-3`}
-                >
-                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                  </svg>
-                  <span>X (Twitter)</span>
-                </motion.a>
-
-                <motion.a
-                  href="https://linkedin.com/in/olacrypt"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ y: -5 }}
-                  className={`p-4 rounded-xl ${
-                    theme === 'dark'
-                      ? 'bg-white/5 border border-white/10'
-                      : 'bg-black/5 border border-black/10'
-                  } backdrop-blur-sm flex items-center gap-3`}
-                >
-                  <Linkedin className="w-5 h-5 text-blue-600" />
-                  <span>LinkedIn</span>
-                </motion.a>
-
-                <motion.a
-                  href="https://github.com/Ola-Crrypt"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ y: -5 }}
-                  className={`p-4 rounded-xl ${
-                    theme === 'dark'
-                      ? 'bg-white/5 border border-white/10'
-                      : 'bg-black/5 border border-black/10'
-                  } backdrop-blur-sm flex items-center gap-3`}
-                >
-                  <Github className="w-5 h-5" />
-                  <span>GitHub</span>
-                </motion.a>
-
-                <motion.a
-                  href="https://youtube.com/@Ola_Crrypt"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ y: -5 }}
-                  className={`p-4 rounded-xl ${
-                    theme === 'dark'
-                      ? 'bg-white/5 border border-white/10'
-                      : 'bg-black/5 border border-black/10'
-                  } backdrop-blur-sm flex items-center gap-3`}
-                >
-                  <Youtube className="w-5 h-5 text-red-600" />
-                  <span>YouTube</span>
-                </motion.a>
-
-                <motion.a
-                  href="https://t.me/Ola_Crrypt"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ y: -5 }}
-                  className={`p-4 rounded-xl ${
-                    theme === 'dark'
-                      ? 'bg-white/5 border border-white/10'
-                      : 'bg-black/5 border border-black/10'
-                  } backdrop-blur-sm flex items-center gap-3`}
-                >
-                  <MessageCircle className="w-5 h-5 text-blue-400" />
-                  <span>Telegram</span>
-                </motion.a>
-
-                <motion.a
-                  href="mailto:contact@olacrypt.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ y: -5 }}
-                  className={`p-4 rounded-xl ${
-                    theme === 'dark'
-                      ? 'bg-white/5 border border-white/10'
-                      : 'bg-black/5 border border-black/10'
-                  } backdrop-blur-sm flex items-center gap-3`}
-                >
-                  <Gmail className="w-5 h-5 text-red-500" />
-                  <span>Gmail</span>
-                </motion.a>
-              </div>
-            </div>
+            <h1 className={`text-4xl md:text-5xl font-bold mb-6 ${
+              theme === 'dark' ? 'text-white' : 'text-gray-900'
+            }`}>
+              Get in Touch
+            </h1>
+            <p className={`text-xl ${
+              theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+            }`}>
+              Have questions? We'd love to hear from you.
+            </p>
           </motion.div>
 
           {/* Contact Form */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3, duration: 0.5 }}
-            className={`p-8 rounded-xl ${
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className={`max-w-2xl mx-auto p-8 rounded-2xl ${
               theme === 'dark'
-                ? 'bg-white/5 border border-white/10'
-                : 'bg-black/5 border border-black/10'
-            } backdrop-blur-sm`}
+                ? 'bg-white/5 border-white/10'
+                : 'bg-white border-gray-200'
+            } border backdrop-blur-sm`}
           >
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label htmlFor="name" className="block text-sm font-medium mb-2">
+                <label htmlFor="name" className={`block text-sm font-medium mb-2 ${
+                  theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                }`}>
                   Name
                 </label>
                 <input
@@ -271,13 +124,19 @@ export default function Contact() {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
+                  className={`w-full px-4 py-2 rounded-lg ${
+                    theme === 'dark'
+                      ? 'bg-white/5 border-white/10 text-white placeholder-gray-400'
+                      : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500'
+                  } border focus:outline-none focus:ring-2 focus:ring-[#FF8C00]/20`}
+                  placeholder="Your name"
                   required
-                  className="w-full px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-black/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-[#FF8C00]"
                 />
               </div>
-
               <div>
-                <label htmlFor="email" className="block text-sm font-medium mb-2">
+                <label htmlFor="email" className={`block text-sm font-medium mb-2 ${
+                  theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                }`}>
                   Email
                 </label>
                 <input
@@ -286,13 +145,19 @@ export default function Contact() {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
+                  className={`w-full px-4 py-2 rounded-lg ${
+                    theme === 'dark'
+                      ? 'bg-white/5 border-white/10 text-white placeholder-gray-400'
+                      : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500'
+                  } border focus:outline-none focus:ring-2 focus:ring-[#FF8C00]/20`}
+                  placeholder="your@email.com"
                   required
-                  className="w-full px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-black/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-[#FF8C00]"
                 />
               </div>
-
               <div>
-                <label htmlFor="subject" className="block text-sm font-medium mb-2">
+                <label htmlFor="subject" className={`block text-sm font-medium mb-2 ${
+                  theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                }`}>
                   Subject
                 </label>
                 <input
@@ -301,13 +166,19 @@ export default function Contact() {
                   name="subject"
                   value={formData.subject}
                   onChange={handleChange}
+                  className={`w-full px-4 py-2 rounded-lg ${
+                    theme === 'dark'
+                      ? 'bg-white/5 border-white/10 text-white placeholder-gray-400'
+                      : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500'
+                  } border focus:outline-none focus:ring-2 focus:ring-[#FF8C00]/20`}
+                  placeholder="What's this about?"
                   required
-                  className="w-full px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-black/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-[#FF8C00]"
                 />
               </div>
-
               <div>
-                <label htmlFor="message" className="block text-sm font-medium mb-2">
+                <label htmlFor="message" className={`block text-sm font-medium mb-2 ${
+                  theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                }`}>
                   Message
                 </label>
                 <textarea
@@ -315,46 +186,63 @@ export default function Contact() {
                   name="message"
                   value={formData.message}
                   onChange={handleChange}
+                  rows={4}
+                  className={`w-full px-4 py-2 rounded-lg ${
+                    theme === 'dark'
+                      ? 'bg-white/5 border-white/10 text-white placeholder-gray-400'
+                      : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500'
+                  } border focus:outline-none focus:ring-2 focus:ring-[#FF8C00]/20`}
+                  placeholder="Your message..."
                   required
-                  rows={5}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-black/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-[#FF8C00] resize-none"
                 />
               </div>
-
-              <motion.button
+              <button
                 type="submit"
-                disabled={isSubmitting}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className={`w-full px-6 py-3 rounded-lg text-white font-medium flex items-center justify-center gap-2 ${
-                  isSubmitting
-                    ? 'bg-gray-400 cursor-not-allowed'
-                    : 'bg-[#FF8C00] hover:bg-[#FF8C00]/90'
-                }`}
+                className={`w-full px-6 py-3 rounded-lg text-sm font-medium ${
+                  theme === 'dark'
+                    ? 'bg-[#FF8C00] text-white hover:bg-[#FF8C00]/90'
+                    : 'bg-[#FF8C00] text-white hover:bg-[#FF8C00]/90'
+                } transition-colors`}
               >
-                {isSubmitting ? (
-                  <>
-                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    Sending...
-                  </>
-                ) : (
-                  <>
-                    <Send className="w-5 h-5" />
-                    Send Message
-                  </>
-                )}
-              </motion.button>
-
-              {submitStatus === 'success' && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="text-green-500 text-center"
-                >
-                  Message sent successfully! I'll get back to you soon.
-                </motion.div>
-              )}
+                Send Message
+              </button>
             </form>
+          </motion.div>
+
+          {/* Contact Info */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16"
+          >
+            {contactInfo.map((info, index) => (
+              <motion.div
+                key={info.title}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 * (index + 1) }}
+                className={`p-6 rounded-2xl ${
+                  theme === 'dark'
+                    ? 'bg-white/5 border-white/10'
+                    : 'bg-white border-gray-200'
+                } border backdrop-blur-sm text-center`}
+              >
+                <info.icon className={`w-8 h-8 mx-auto mb-4 ${
+                  theme === 'dark' ? 'text-[#FF8C00]' : 'text-[#FF8C00]'
+                }`} />
+                <h3 className={`text-lg font-semibold mb-2 ${
+                  theme === 'dark' ? 'text-white' : 'text-gray-900'
+                }`}>
+                  {info.title}
+                </h3>
+                <p className={`${
+                  theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                }`}>
+                  {info.content}
+                </p>
+              </motion.div>
+            ))}
           </motion.div>
         </div>
       </div>

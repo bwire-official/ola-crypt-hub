@@ -22,6 +22,7 @@ import {
   Star
 } from 'lucide-react';
 import { LucideIcon } from 'lucide-react';
+import Image from 'next/image';
 
 // Features data
 const features = [
@@ -562,171 +563,204 @@ export default function Network() {
   };
 
   return (
-    <div className="min-h-screen">
-      {/* Floating Elements */}
-      <FloatingElement icon={Wallet} className="top-20 left-10" delay={0} />
-      <FloatingElement icon={Shield} className="top-40 right-20" delay={0.2} />
-      <FloatingElement icon={Zap} className="bottom-20 left-1/4" delay={0.4} />
-      <FloatingElement icon={MessageSquare} className="bottom-40 right-1/3" delay={0.6} />
+    <div className="container relative mx-auto px-4 py-16">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-16"
+        >
+          <h1 className={`text-4xl md:text-5xl font-bold mb-6 ${
+            theme === 'dark' ? 'text-white' : 'text-gray-900'
+          }`}>
+            Join Our Network
+          </h1>
+          <p className={`text-xl ${
+            theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+          }`}>
+            Connect with talented professionals in the Web3 ecosystem
+          </p>
+        </motion.div>
 
-      {/* Hero Section */}
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="relative py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[#FF8C00]/5 to-transparent"
-      >
-        <div className="max-w-7xl mx-auto text-center">
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-6"
-          >
-            Connect with Web3 Talent
-          </motion.h1>
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto"
-          >
-            Find the perfect match for your blockchain projects or discover exciting opportunities in the Web3 space.
-          </motion.p>
-        </div>
-      </motion.div>
-
-      {/* Feature Grid */}
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.4 }}
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12"
-      >
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* Features Grid */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16"
+        >
           {features.map((feature, index) => (
             <motion.div
               key={feature.title}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.5 + index * 0.1 }}
-              whileHover={{ 
-                scale: 1.03,
-                boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
-                borderColor: "#FF8C00"
-              }}
-              className="p-6 rounded-xl bg-white dark:bg-dark border border-gray-200 dark:border-gray-800 transition-all duration-300 group relative overflow-hidden"
+              transition={{ duration: 0.5, delay: 0.1 * (index + 1) }}
+              whileHover={{ scale: 1.02, y: -5 }}
+              className={`p-6 rounded-2xl ${
+                theme === 'dark'
+                  ? 'bg-white/5 border-white/10 hover:border-[#FF8C00]/20 hover:bg-[#FF8C00]/5'
+                  : 'bg-white border-gray-200 hover:border-[#FF8C00]/30 hover:bg-[#FF8C00]/5'
+              } border transition-all duration-300 hover:shadow-lg hover:shadow-[#FF8C00]/10 backdrop-blur-sm`}
             >
-              {/* Animated background gradient */}
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-br from-[#FF8C00]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                initial={{ scale: 0.8 }}
-                whileHover={{ scale: 1.2 }}
-                transition={{ duration: 0.3 }}
-              />
-              
-              {/* Icon with glow effect */}
-              <motion.div
-                className="relative mb-4"
-                whileHover={{ scale: 1.1 }}
-                transition={{ duration: 0.2 }}
-              >
-                <div className="absolute inset-0 bg-[#FF8C00] blur-xl opacity-20 animate-pulse" />
-                <feature.icon className="relative w-12 h-12 text-[#FF8C00] drop-shadow-[0_0_8px_rgba(255,140,0,0.5)]" />
-              </motion.div>
-
-              {/* Content */}
-              <div className="relative">
-                <motion.h3 
-                  className="text-xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-[#FF8C00] transition-colors duration-300"
-                  whileHover={{ x: 5 }}
-                >
-                  {feature.title}
-                </motion.h3>
-                <motion.p 
-                  className="text-gray-600 dark:text-gray-400"
-                  whileHover={{ x: 5 }}
-                >
-                  {feature.description}
-                </motion.p>
-              </div>
-
-              {/* Hover border effect */}
-              <motion.div
-                className="absolute inset-0 border-2 border-transparent rounded-xl"
-                whileHover={{ borderColor: "#FF8C00" }}
-                transition={{ duration: 0.3 }}
-              />
+              <feature.icon className={`w-8 h-8 mb-4 ${
+                theme === 'dark' ? 'text-[#FF8C00]' : 'text-[#FF8C00]'
+              }`} />
+              <h3 className={`text-xl font-semibold mb-2 ${
+                theme === 'dark' ? 'text-white' : 'text-gray-900'
+              }`}>
+                {feature.title}
+              </h3>
+              <p className={`${
+                theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+              }`}>
+                {feature.description}
+              </p>
             </motion.div>
           ))}
-        </div>
-      </motion.div>
+        </motion.div>
 
-      {/* Main Content */}
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.6 }}
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12"
-      >
-        {/* Tab Navigation */}
-        <div className="flex space-x-4 mb-8">
-          {['talents', 'projects'].map((tab) => (
-            <motion.button
-              key={tab}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setActiveTab(tab as 'talents' | 'projects')}
-              className={`px-6 py-2 rounded-lg font-medium transition-colors ${
-                activeTab === tab
-                  ? 'bg-[#FF8C00] text-white'
-                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
-              }`}
-            >
-              {tab.charAt(0).toUpperCase() + tab.slice(1)}
-            </motion.button>
-          ))}
-        </div>
-
-        {/* Search and Filter Bar */}
-        <motion.div 
+        {/* Search and Filter */}
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.7 }}
-          className="flex flex-col sm:flex-row gap-4 mb-8"
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className={`p-6 rounded-2xl mb-8 ${
+            theme === 'dark'
+              ? 'bg-white/5 border-white/10'
+              : 'bg-white border-gray-200'
+          } border backdrop-blur-sm`}
         >
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <input
-              type="text"
-              placeholder={`Search ${activeTab}...`}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-dark focus:outline-none focus:ring-2 focus:ring-[#FF8C00]"
-            />
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex-1 relative">
+              <Search className={`absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 ${
+                theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+              }`} />
+              <input
+                type="text"
+                placeholder="Search by skills, location, or interests..."
+                className={`w-full pl-10 pr-4 py-2 rounded-lg ${
+                  theme === 'dark'
+                    ? 'bg-white/5 border-white/10 text-white placeholder-gray-400'
+                    : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500'
+                } border focus:outline-none focus:ring-2 focus:ring-[#FF8C00]/20`}
+              />
+            </div>
+            <div className="flex gap-4">
+              <button
+                onClick={() => setIsLocationOpen(true)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
+                  theme === 'dark'
+                    ? 'bg-white/5 border-white/10 text-white hover:bg-white/10'
+                    : 'bg-gray-50 border-gray-200 text-gray-900 hover:bg-gray-100'
+                } border transition-colors`}
+              >
+                <MapPin className="w-5 h-5" />
+                <span>Location</span>
+                <ChevronDown className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => setIsFilterOpen(true)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
+                  theme === 'dark'
+                    ? 'bg-white/5 border-white/10 text-white hover:bg-white/10'
+                    : 'bg-gray-50 border-gray-200 text-gray-900 hover:bg-gray-100'
+                } border transition-colors`}
+              >
+                <Filter className="w-5 h-5" />
+                <span>Filter</span>
+                <ChevronDown className="w-4 h-4" />
+              </button>
+            </div>
           </div>
-          <FilterDropdown
-            value={locationFilter}
-            onChange={setLocationFilter}
-          />
         </motion.div>
 
-        {/* Results Grid */}
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.8 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        {/* Network Grid */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
           {filteredItems.map((item, index) => (
-            <ItemCard
+            <motion.div
               key={item.id || item.title}
-              item={item}
-              onClick={handleItemClick}
-            />
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 * (index + 1) }}
+              whileHover={{ scale: 1.02, y: -5 }}
+              className={`p-6 rounded-2xl ${
+                theme === 'dark'
+                  ? 'bg-white/5 border-white/10 hover:border-[#FF8C00]/20 hover:bg-[#FF8C00]/5'
+                  : 'bg-white border-gray-200 hover:border-[#FF8C00]/30 hover:bg-[#FF8C00]/5'
+              } border transition-all duration-300 hover:shadow-lg hover:shadow-[#FF8C00]/10 backdrop-blur-sm`}
+            >
+              <div className="flex items-center gap-4 mb-4">
+                <div className="relative w-12 h-12 rounded-full overflow-hidden">
+                  <Image
+                    src={`/images/${isTalentItem(item) ? 'talent' : 'project'}.jpg`}
+                    alt={isTalentItem(item) ? item.name : item.title}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <div>
+                  <h3 className={`text-lg font-semibold ${
+                    theme === 'dark' ? 'text-white' : 'text-gray-900'
+                  }`}>
+                    {isTalentItem(item) ? item.name : item.title}
+                  </h3>
+                  <p className={`text-sm ${
+                    theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                  }`}>
+                    {isTalentItem(item) ? item.title : item.description}
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-2 mb-4">
+                {item.skills.map((skill) => (
+                  <span
+                    key={skill}
+                    className={`px-2 py-1 rounded-full text-xs ${
+                      theme === 'dark'
+                        ? 'bg-[#FF8C00]/10 text-[#FF8C00]'
+                        : 'bg-[#FF8C00]/5 text-[#FF8C00]'
+                    }`}
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <MapPin className={`w-4 h-4 ${
+                    theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                  }`} />
+                  <span className={`text-sm ${
+                    theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                  }`}>
+                    {isTalentItem(item) ? item.location : item.location}
+                  </span>
+                </div>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleItemClick(item);
+                  }}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium ${
+                    theme === 'dark'
+                      ? 'bg-[#FF8C00] text-white hover:bg-[#FF8C00]/90'
+                      : 'bg-[#FF8C00] text-white hover:bg-[#FF8C00]/90'
+                  } transition-colors`}
+                >
+                  Connect
+                </button>
+              </div>
+            </motion.div>
           ))}
         </motion.div>
-      </motion.div>
+      </div>
 
       {/* Enhanced Login Prompt Modal */}
       <AnimatePresence>

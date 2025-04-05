@@ -5,6 +5,8 @@ import { useTheme } from '@/context/ThemeContext';
 import { Search, Filter, BookOpen, TrendingUp, BarChart, Lightbulb, Clock, Bookmark, Share2, MessageSquare, Twitter, Gift, Rocket } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import Loading from './loading';
+import Image from 'next/image';
+import { Calendar } from 'lucide-react';
 
 // Types
 import { LucideIcon } from 'lucide-react';
@@ -169,83 +171,32 @@ export default function Insights() {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 container mx-auto px-4 py-12">
-        {/* Hero Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-12"
-        >
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Insights & Analysis
-          </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            Discover data-driven insights, market analysis, and thought leadership in Web3, blockchain, and future technology.
-          </p>
-        </motion.div>
-
-        {/* Search and Filter Bar */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.5 }}
-          className="max-w-2xl mx-auto mb-12"
-        >
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-            <input
-              type="text"
-              placeholder="Search insights by title, content, or tags..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-black/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-[#FF8C00] text-lg shadow-lg"
-            />
-            {searchQuery && (
-              <motion.button
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                onClick={() => setSearchQuery('')}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </motion.button>
-            )}
-          </div>
-        </motion.div>
-
-        {/* Categories */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.5 }}
-          className="flex flex-wrap justify-center gap-2 mb-12"
-        >
-          {categories.map((category) => (
-            <motion.button
-              key={category}
-              onClick={() => setActiveCategory(category)}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className={`px-6 py-2 rounded-lg transition-colors ${
-                activeCategory === category
-                  ? 'bg-[#FF8C00] text-white shadow-lg'
-                  : 'bg-white/50 dark:bg-black/50 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
-              }`}
-            >
-              {category}
-            </motion.button>
-          ))}
-        </motion.div>
-
-        {/* Insights Grid */}
-        <AnimatePresence>
+      <div className="container relative mx-auto px-4 py-16">
+        <div className="max-w-7xl mx-auto">
+          {/* Header */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4, duration: 0.5 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-16"
+          >
+            <h1 className={`text-4xl md:text-5xl font-bold mb-6 ${
+              theme === 'dark' ? 'text-white' : 'text-gray-900'
+            }`}>
+              Web3 Insights
+            </h1>
+            <p className={`text-xl ${
+              theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+            }`}>
+              Stay updated with the latest trends and analysis in the Web3 space
+            </p>
+          </motion.div>
+
+          {/* Insights Grid */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
             {filteredInsights.map((insight, index) => (
@@ -253,106 +204,68 @@ export default function Insights() {
                 key={insight.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                className={`relative rounded-xl overflow-hidden ${
+                transition={{ duration: 0.5, delay: 0.1 * (index + 1) }}
+                whileHover={{ scale: 1.02, y: -5 }}
+                className={`p-6 rounded-2xl ${
                   theme === 'dark'
-                    ? 'bg-white/5 border border-white/10'
-                    : 'bg-black/5 border border-black/10'
-                } backdrop-blur-sm hover:shadow-xl transition-shadow`}
+                    ? 'bg-white/5 border-white/10 hover:border-[#FF8C00]/20 hover:bg-[#FF8C00]/5'
+                    : 'bg-white border-gray-200 hover:border-[#FF8C00]/30 hover:bg-[#FF8C00]/5'
+                } border transition-all duration-300 hover:shadow-lg hover:shadow-[#FF8C00]/10 backdrop-blur-sm`}
               >
-                {/* Thumbnail */}
-                <div className="relative h-48 overflow-hidden">
-                  <img
+                <div className="relative w-full h-48 mb-4 rounded-lg overflow-hidden">
+                  <Image
                     src={insight.thumbnail}
                     alt={insight.title}
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                  {insight.featured && (
-                    <div className="absolute top-4 right-4 px-3 py-1 bg-[#FF8C00] text-white rounded-full text-sm font-medium">
-                      Featured
-                    </div>
-                  )}
-                  {insight.type === 'thread' && (
-                    <div className="absolute top-4 left-4 px-3 py-1 bg-blue-500 text-white rounded-full text-sm font-medium flex items-center gap-2">
-                      <Twitter className="w-4 h-4" />
-                      Thread
-                    </div>
-                  )}
-                </div>
-
-                {/* Content */}
-                <div className="p-6">
-                  {/* Category */}
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-sm font-medium text-[#FF8C00]">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  <div className="absolute bottom-4 left-4 right-4">
+                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                      theme === 'dark'
+                        ? 'bg-[#FF8C00] text-white'
+                        : 'bg-[#FF8C00] text-white'
+                    }`}>
                       {insight.category}
                     </span>
                   </div>
-
-                  {/* Title */}
-                  <h3 className="text-xl font-bold mb-2 line-clamp-2">
-                    {insight.title}
-                  </h3>
-
-                  {/* Excerpt */}
-                  <p className="text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
-                    {insight.excerpt}
-                  </p>
-
-                  {/* Meta Info */}
-                  <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 mb-4">
-                    <div className="flex items-center gap-2">
-                      <Clock className="w-4 h-4" />
-                      <span>{insight.readTime}</span>
-                    </div>
-                    <span>{insight.date}</span>
+                </div>
+                <h3 className={`text-xl font-semibold mb-2 ${
+                  theme === 'dark' ? 'text-white' : 'text-gray-900'
+                }`}>
+                  {insight.title}
+                </h3>
+                <p className={`mb-4 ${
+                  theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                }`}>
+                  {insight.excerpt}
+                </p>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Calendar className={`w-4 h-4 ${
+                      theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                    }`} />
+                    <span className={`text-sm ${
+                      theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                    }`}>
+                      {insight.date}
+                    </span>
                   </div>
-
-                  {/* Tags */}
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {insight.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="px-2 py-1 rounded-full text-xs bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex items-center gap-4">
-                    {insight.type === 'thread' ? (
-                      <a
-                        href={insight.threadUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex-1 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-center font-medium flex items-center justify-center gap-2"
-                      >
-                        <Twitter className="w-5 h-5" />
-                        Read Thread
-                      </a>
-                    ) : (
-                      <button className="flex-1 px-4 py-2 bg-[#FF8C00] text-white rounded-lg hover:bg-[#FF8C00]/90 transition-colors text-center font-medium">
-                        Read More
-                      </button>
-                    )}
-                    <div className="flex gap-2">
-                      <button className="p-2 rounded-lg border border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-                        <Bookmark className="w-5 h-5" />
-                      </button>
-                      <button className="p-2 rounded-lg border border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-                        <Share2 className="w-5 h-5" />
-                      </button>
-                    </div>
-                  </div>
+                  <button
+                    onClick={() => setSelectedInsight(insight.id)}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium ${
+                      theme === 'dark'
+                        ? 'bg-[#FF8C00] text-white hover:bg-[#FF8C00]/90'
+                        : 'bg-[#FF8C00] text-white hover:bg-[#FF8C00]/90'
+                    } transition-colors`}
+                  >
+                    Read More
+                  </button>
                 </div>
               </motion.div>
             ))}
           </motion.div>
-        </AnimatePresence>
+        </div>
       </div>
     </div>
   );

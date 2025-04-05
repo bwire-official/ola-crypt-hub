@@ -6,6 +6,7 @@ import { Search, Filter, Calendar, Clock, MapPin, Share2, Bookmark, MessageSquar
 import { useState, useEffect } from 'react';
 import EventGrid from '@/components/EventGrid';
 import Loading from './loading';
+import Image from 'next/image';
 
 type EventType = 'CONFERENCE' | 'PANEL' | 'MEETUP' | 'TWITTER_SPACE';
 type EventStatus = 'UPCOMING' | 'COMPLETED';
@@ -184,68 +185,100 @@ export default function Events() {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 container mx-auto px-4 py-12">
-        {/* Hero Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
-        >
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Events & Workshops
-          </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            Join our community events, workshops, and conferences to learn, connect, and grow in the world of Web3.
-          </p>
-        </motion.div>
+      <div className="container relative mx-auto px-4 py-16">
+        <div className="max-w-7xl mx-auto">
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-16"
+          >
+            <h1 className={`text-4xl md:text-5xl font-bold mb-6 ${
+              theme === 'dark' ? 'text-white' : 'text-gray-900'
+            }`}>
+              Upcoming Events
+            </h1>
+            <p className={`text-xl ${
+              theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+            }`}>
+              Join us for exciting Web3 events and networking opportunities
+            </p>
+          </motion.div>
 
-        {/* Search and Filter Bar */}
-        <div className="max-w-2xl mx-auto mb-12">
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-            <input
-              type="text"
-              placeholder="Search events by title, description, or location..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-black/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-[#FF8C00] text-lg shadow-lg"
-            />
-            {searchQuery && (
-              <motion.button
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                onClick={() => setSearchQuery('')}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+          {/* Events Grid */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          >
+            {filteredEvents.map((event, index) => (
+              <motion.div
+                key={event.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 * (index + 1) }}
+                whileHover={{ scale: 1.02, y: -5 }}
+                className={`p-6 rounded-2xl ${
+                  theme === 'dark'
+                    ? 'bg-white/5 border-white/10 hover:border-[#FF8C00]/20 hover:bg-[#FF8C00]/5'
+                    : 'bg-white border-gray-200 hover:border-[#FF8C00]/30 hover:bg-[#FF8C00]/5'
+                } border transition-all duration-300 hover:shadow-lg hover:shadow-[#FF8C00]/10 backdrop-blur-sm`}
               >
-                <X className="w-5 h-5" />
-              </motion.button>
-            )}
-          </div>
+                <div className="relative w-full h-48 mb-4 rounded-lg overflow-hidden">
+                  <Image
+                    src={event.thumbnail}
+                    alt={event.title}
+                    fill
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  <div className="absolute bottom-4 left-4 right-4">
+                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                      theme === 'dark'
+                        ? 'bg-[#FF8C00] text-white'
+                        : 'bg-[#FF8C00] text-white'
+                    }`}>
+                      {event.date}
+                    </span>
+                  </div>
+                </div>
+                <h3 className={`text-xl font-semibold mb-2 ${
+                  theme === 'dark' ? 'text-white' : 'text-gray-900'
+                }`}>
+                  {event.title}
+                </h3>
+                <p className={`mb-4 ${
+                  theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                }`}>
+                  {event.description}
+                </p>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <MapPin className={`w-4 h-4 ${
+                      theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                    }`} />
+                    <span className={`text-sm ${
+                      theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                    }`}>
+                      {event.location}
+                    </span>
+                  </div>
+                  <button
+                    className={`px-4 py-2 rounded-lg text-sm font-medium ${
+                      theme === 'dark'
+                        ? 'bg-[#FF8C00] text-white hover:bg-[#FF8C00]/90'
+                        : 'bg-[#FF8C00] text-white hover:bg-[#FF8C00]/90'
+                    } transition-colors`}
+                  >
+                    Register
+                  </button>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
-
-        {/* Event Type Tabs */}
-        <div className="flex flex-wrap justify-center gap-2 mb-8">
-          {['ALL', 'UPCOMING', 'COMPLETED'].map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab as typeof activeTab)}
-              className={`px-6 py-2 rounded-lg transition-colors ${
-                activeTab === tab
-                  ? 'bg-[#FF8C00] text-white shadow-lg'
-                  : 'bg-white/50 dark:bg-black/50 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
-              }`}
-            >
-              {tab === 'ALL' ? 'All Events' : tab.charAt(0) + tab.slice(1).toLowerCase()}
-            </button>
-          ))}
-        </div>
-
-        {/* Event Grid */}
-        <EventGrid
-          events={filteredEvents}
-          filter={activeTab}
-          type={activeType}
-        />
       </div>
     </div>
   );

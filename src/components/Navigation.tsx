@@ -66,7 +66,7 @@ export default function Navigation() {
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
       className={`fixed top-0 left-0 right-0 z-50 ${
-        isScrolled
+        isScrolled || theme === 'light'
           ? theme === 'dark'
             ? 'bg-dark/80 backdrop-blur-md border-b border-border/50'
             : 'bg-white/80 backdrop-blur-md border-b border-gray-200'
