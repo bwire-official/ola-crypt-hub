@@ -6,6 +6,15 @@ import { Search, Filter, BookOpen, TrendingUp, BarChart, Lightbulb, Clock, Bookm
 import { useState, useEffect } from 'react';
 import Loading from './loading';
 
+// Types
+import { LucideIcon } from 'lucide-react';
+
+interface FloatingIconProps {
+  icon: LucideIcon;
+  delay?: number;
+  style?: React.CSSProperties;
+}
+
 // Mock data for insights
 const mockInsights = [
   {
@@ -104,14 +113,15 @@ const categories = [
 ];
 
 // Floating icons component
-const FloatingIcon = ({ icon: Icon, delay = 0 }) => (
+const FloatingIcon = ({ icon: Icon, delay = 0, style }: FloatingIconProps) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
-    transition={{ delay }}
-    className="absolute w-8 h-8 text-[#FF8C00]/30"
+    transition={{ duration: 0.5, delay }}
+    className="absolute"
+    style={style}
   >
-    <Icon className="w-full h-full" />
+    <Icon className="w-6 h-6 text-[#FF8C00]" />
   </motion.div>
 );
 

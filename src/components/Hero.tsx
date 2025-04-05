@@ -693,6 +693,11 @@ export default function Hero() {
                     width={384}
                     height={384}
                     className="w-full h-full object-cover rounded-full"
+                    onError={() => setHasError(true)}
+                    priority
+                    loading="eager"
+                    unoptimized
+                    quality={100}
                   />
                 </div>
               </motion.div>

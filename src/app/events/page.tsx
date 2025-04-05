@@ -1,74 +1,93 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@/context/ThemeContext';
-import { Search, Filter, Calendar, Clock, MapPin, Share2, Bookmark, MessageSquare, Hash, Users, CalendarPlus } from 'lucide-react';
+import { Search, Filter, Calendar, Clock, MapPin, Share2, Bookmark, MessageSquare, Hash, Users, CalendarPlus, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import EventGrid from '@/components/EventGrid';
 import Loading from './loading';
 
+type EventType = 'CONFERENCE' | 'PANEL' | 'MEETUP' | 'TWITTER_SPACE';
+type EventStatus = 'UPCOMING' | 'COMPLETED';
+
+interface Event {
+  id: string;
+  title: string;
+  date: string;
+  time: string;
+  location: string;
+  description: string;
+  type: EventType;
+  status: EventStatus;
+  link: string;
+  thumbnail: string;
+  recording?: string;
+  twitterSpaceId?: string;
+}
+
 // Mock data for events
-const mockEvents = [
+const mockEvents: Event[] = [
   {
     id: '1',
     title: 'Web3 Development Workshop',
     date: '2024-03-15',
-    time: '2:00 PM - 4:00 PM',
+    time: '14:00 UTC',
     location: 'Virtual',
-    description: 'Learn the fundamentals of Web3 development and blockchain technology in this hands-on workshop.',
-    type: 'WORKSHOP',
+    description: 'Learn the fundamentals of Web3 development and smart contract programming.',
+    type: 'CONFERENCE' as const,
     status: 'UPCOMING',
-    link: 'https://example.com/workshop',
-    thumbnail: '/images/workshop.jpg'
+    link: '#',
+    thumbnail: '/images/event1.jpg'
   },
   {
     id: '2',
-    title: 'Crypto Trading Panel',
-    date: '2024-03-10',
-    time: '3:00 PM - 5:00 PM',
-    location: 'Hybrid',
-    description: 'Join industry experts for a discussion on cryptocurrency trading strategies and market analysis.',
-    type: 'PANEL',
-    status: 'PAST',
-    recording: 'https://example.com/recording',
-    thumbnail: '/images/panel.jpg'
+    title: 'Blockchain Security Panel',
+    date: '2024-03-20',
+    time: '16:00 UTC',
+    location: 'Virtual',
+    description: 'Expert panel discussion on blockchain security best practices.',
+    type: 'PANEL' as const,
+    status: 'UPCOMING',
+    link: '#',
+    thumbnail: '/images/event2.jpg'
   },
   {
     id: '3',
-    title: 'NFT Art Space',
-    date: '2024-03-20',
-    time: '1:00 PM - 3:00 PM',
-    location: 'In-person',
-    description: 'Explore the world of NFT art and digital collectibles with leading artists and collectors.',
-    type: 'SPACE',
+    title: 'Community Meetup',
+    date: '2024-03-25',
+    time: '18:00 UTC',
+    location: 'Virtual',
+    description: 'Monthly community meetup to discuss latest developments.',
+    type: 'MEETUP' as const,
     status: 'UPCOMING',
-    link: 'https://example.com/nft-space',
-    thumbnail: '/images/nft-space.jpg'
+    link: '#',
+    thumbnail: '/images/event3.jpg'
   },
   {
     id: '4',
-    title: 'DeFi Conference',
-    date: '2024-03-25',
-    time: '10:00 AM - 6:00 PM',
-    location: 'Virtual',
-    description: 'A comprehensive conference on decentralized finance, featuring keynote speakers and workshops.',
-    type: 'CONFERENCE',
-    status: 'UPCOMING',
-    link: 'https://example.com/defi-conf',
-    thumbnail: '/images/conference.jpg'
+    title: 'Twitter Space: Future of DeFi',
+    date: '2024-03-10',
+    time: '15:00 UTC',
+    location: 'Twitter',
+    description: 'Join us for a Twitter Space discussion on the future of DeFi.',
+    type: 'TWITTER_SPACE' as const,
+    status: 'COMPLETED',
+    link: '#',
+    thumbnail: '/images/event4.jpg',
+    twitterSpaceId: '123456789'
   },
   {
     id: '5',
-    title: 'Web3 Community Twitter Space',
-    date: '2024-03-18',
-    time: '4:00 PM - 5:00 PM',
-    location: 'Twitter',
-    description: 'Join us for an engaging discussion about the future of Web3 and blockchain technology.',
-    type: 'TWITTER_SPACE',
-    status: 'UPCOMING',
-    link: 'https://twitter.com/i/spaces/example',
-    twitterSpaceId: 'example',
-    thumbnail: '/images/twitter-space.jpg'
+    title: 'Previous Conference Recording',
+    date: '2024-02-15',
+    time: '14:00 UTC',
+    location: 'Virtual',
+    description: 'Watch the recording of our previous conference on Web3 development.',
+    type: 'CONFERENCE' as const,
+    status: 'COMPLETED',
+    link: '#',
+    thumbnail: '/images/event5.jpg',
+    recording: 'https://youtube.com/watch?v=example'
   }
 ];
 
@@ -122,8 +141,8 @@ const FloatingIcon = ({ icon: Icon, delay, duration, x, y }: {
 
 export default function Events() {
   const { theme } = useTheme();
-  const [activeTab, setActiveTab] = useState<'ALL' | 'UPCOMING' | 'LIVE' | 'PAST'>('ALL');
-  const [activeType, setActiveType] = useState<'ALL' | 'SPACE' | 'CONFERENCE' | 'PANEL' | 'MEETUP'>('ALL');
+  const [activeTab, setActiveTab] = useState<'ALL' | 'UPCOMING' | 'COMPLETED'>('ALL');
+  const [activeType, setActiveType] = useState<'ALL' | EventType>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
@@ -198,23 +217,15 @@ export default function Events() {
                 onClick={() => setSearchQuery('')}
                 className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
+                <X className="w-5 h-5" />
               </motion.button>
             )}
-          </div>
-          <div className="flex justify-center gap-2 mt-4">
-            <button className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-              <Filter className="w-5 h-5" />
-              <span>Filter</span>
-            </button>
           </div>
         </div>
 
         {/* Event Type Tabs */}
         <div className="flex flex-wrap justify-center gap-2 mb-8">
-          {['ALL', 'UPCOMING', 'LIVE', 'PAST'].map((tab) => (
+          {['ALL', 'UPCOMING', 'COMPLETED'].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab as typeof activeTab)}
@@ -224,7 +235,7 @@ export default function Events() {
                   : 'bg-white/50 dark:bg-black/50 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
               }`}
             >
-              {tab}
+              {tab === 'ALL' ? 'All Events' : tab.charAt(0) + tab.slice(1).toLowerCase()}
             </button>
           ))}
         </div>

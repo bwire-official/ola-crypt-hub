@@ -3,6 +3,9 @@
 import { motion } from 'framer-motion';
 import EventCard from './EventCard';
 
+type EventType = 'CONFERENCE' | 'PANEL' | 'MEETUP' | 'TWITTER_SPACE';
+type EventStatus = 'UPCOMING' | 'COMPLETED';
+
 interface Event {
   id: string;
   title: string;
@@ -10,19 +13,18 @@ interface Event {
   time: string;
   location: string;
   description: string;
-  type: 'SPACE' | 'CONFERENCE' | 'PANEL' | 'MEETUP' | 'TWITTER_SPACE';
-  status: 'UPCOMING' | 'LIVE' | 'PAST';
-  guests?: string[];
-  link?: string;
+  type: EventType;
+  status: EventStatus;
+  link: string;
+  thumbnail: string;
   recording?: string;
-  thumbnail?: string;
   twitterSpaceId?: string;
 }
 
 interface EventGridProps {
   events: Event[];
-  filter?: 'ALL' | 'UPCOMING' | 'LIVE' | 'PAST';
-  type?: 'ALL' | 'SPACE' | 'CONFERENCE' | 'PANEL' | 'MEETUP' | 'TWITTER_SPACE';
+  filter?: 'ALL' | 'UPCOMING' | 'COMPLETED';
+  type?: 'ALL' | EventType;
 }
 
 export default function EventGrid({ events, filter = 'ALL', type = 'ALL' }: EventGridProps) {

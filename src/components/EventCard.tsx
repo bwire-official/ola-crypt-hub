@@ -5,18 +5,21 @@ import { useTheme } from '@/context/ThemeContext';
 import { Calendar, Clock, MapPin, Share2, Bookmark, MessageSquare, Hash, Users, CalendarPlus } from 'lucide-react';
 import { useState } from 'react';
 
+type EventType = 'CONFERENCE' | 'PANEL' | 'MEETUP' | 'TWITTER_SPACE';
+type EventStatus = 'UPCOMING' | 'COMPLETED';
+
 interface EventCardProps {
+  id: string;
   title: string;
   date: string;
   time: string;
   location: string;
   description: string;
-  type: 'SPACE' | 'CONFERENCE' | 'PANEL' | 'MEETUP' | 'TWITTER_SPACE';
-  status: 'UPCOMING' | 'LIVE' | 'PAST';
-  guests?: string[];
-  link?: string;
+  type: EventType;
+  status: EventStatus;
+  link: string;
+  thumbnail: string;
   recording?: string;
-  thumbnail?: string;
   twitterSpaceId?: string;
 }
 
@@ -28,7 +31,6 @@ export default function EventCard({
   description,
   type,
   status,
-  guests,
   link,
   recording,
   thumbnail,
@@ -68,9 +70,7 @@ export default function EventCard({
     switch (status) {
       case 'UPCOMING':
         return 'bg-blue-500/10 text-blue-500 border-blue-500/20';
-      case 'LIVE':
-        return 'bg-green-500/10 text-green-500 border-green-500/20';
-      case 'PAST':
+      case 'COMPLETED':
         return 'bg-gray-500/10 text-gray-500 border-gray-500/20';
       default:
         return 'bg-[#FF8C00]/10 text-[#FF8C00] border-[#FF8C00]/20';
@@ -79,8 +79,6 @@ export default function EventCard({
 
   const getTypeIcon = () => {
     switch (type) {
-      case 'SPACE':
-        return <Users className="w-5 h-5" />;
       case 'CONFERENCE':
         return <Calendar className="w-5 h-5" />;
       case 'PANEL':
@@ -130,7 +128,7 @@ export default function EventCard({
           <div className="flex items-center gap-2">
             {getTypeIcon()}
             <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
-              {type.charAt(0) + type.slice(1).toLowerCase()}
+              {type.charAt(0) + type.slice(1).toLowerCase().replace('_', ' ')}
             </span>
           </div>
           <motion.button
@@ -177,7 +175,7 @@ export default function EventCard({
         </p>
 
         {/* Status Badge */}
-        <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${getStatusColor()}`}>
+        <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getStatusColor()}`}>
           {status.charAt(0) + status.slice(1).toLowerCase()}
         </div>
 
@@ -195,7 +193,7 @@ export default function EventCard({
               {type === 'TWITTER_SPACE' ? 'Join Space' : 'Join Event'}
             </motion.a>
           )}
-          {status === 'PAST' && recording && (
+          {status === 'COMPLETED' && recording && (
             <motion.a
               href={recording}
               target="_blank"
@@ -207,7 +205,7 @@ export default function EventCard({
               {type === 'TWITTER_SPACE' ? 'Listen to Space' : 'Watch Recording'}
             </motion.a>
           )}
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}

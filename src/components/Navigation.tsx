@@ -31,10 +31,14 @@ const navItems = [
 ];
 
 export default function Navigation() {
-  const { theme, toggleTheme } = useTheme();
+  const { theme, toggleTheme, isInitialized } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+
+  if (!isInitialized) {
+    return null;
+  }
 
   useEffect(() => {
     const handleScroll = () => {
