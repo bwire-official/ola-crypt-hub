@@ -17,11 +17,16 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
+    // Set dark mode as default
+    document.documentElement.classList.add('dark');
+    
+    // Check for saved theme preference
     const savedTheme = localStorage.getItem('theme') as Theme;
     if (savedTheme) {
       setTheme(savedTheme);
       document.documentElement.classList.toggle('dark', savedTheme === 'dark');
     }
+    
     setIsInitialized(true);
   }, []);
 

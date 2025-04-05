@@ -178,6 +178,13 @@ export default function About() {
                   alt="Ola_Crrypt Logo"
                   fill
                   className="object-cover"
+                  priority
+                  loading="eager"
+                  unoptimized
+                  quality={100}
+                  onError={(e) => {
+                    console.error('Image loading error:', e);
+                  }}
                 />
               </div>
             </motion.div>

@@ -17,8 +17,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <body className={`${inter.className} min-h-screen text-dark dark:text-light transition-colors duration-300`}>
+    <html lang="en" className="scroll-smooth dark">
+      <body className={`${inter.className} min-h-screen text-dark dark:text-light transition-colors duration-300 bg-dark-lighter dark:bg-dark`}>
         <ThemeProvider>
           <Navigation />
           <main className="pt-16">
