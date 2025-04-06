@@ -1,321 +1,230 @@
 'use client';
 
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { useTheme } from '@/context/ThemeContext';
-import { 
-  Code2, 
-  Brain, 
-  Network, 
-  Shield, 
-  BookOpen, 
-  Users, 
-  Globe, 
-  Zap,
-  Loader2
-} from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Bitcoin, Code2, Database, Globe2, Megaphone, Users, Sparkles } from 'lucide-react';
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
-const skills = [
-  { name: 'Web3 Development', icon: Code2, description: 'Building secure and scalable blockchain solutions' },
-  { name: 'Data Science', icon: Brain, description: 'Driving data-driven decisions and insights' },
-  { name: 'Network Security', icon: Shield, description: 'Protecting digital assets and infrastructure' },
-  { name: 'Community Building', icon: Users, description: 'Fostering Web3 ecosystem growth' },
-  { name: 'Brand Ambassadorship', icon: Globe, description: 'Representing innovative Web3 projects' },
-  { name: 'Content Creation', icon: BookOpen, description: 'Sharing knowledge and insights' },
-  { name: 'Event Hosting', icon: Zap, description: 'Leading impactful Twitter Spaces' },
-];
+const fadeInUp = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.5 }
+};
 
-const achievements = [
-  { title: 'Web3 Projects', count: '20+', description: 'Secure and innovative solutions' },
-  { title: 'Twitter Spaces', count: '50+', description: 'Engaging community discussions' },
-  { title: 'Brand Collaborations', count: '10+', description: 'Strategic partnerships' },
-  { title: 'Data Insights', count: '100+', description: 'Published analyses and reports' },
-];
+const staggerContainer = {
+  animate: {
+    transition: {
+      staggerChildren: 0.2
+    }
+  }
+};
 
 const floatingIcons = [
-  { icon: Code2, delay: 0 },
-  { icon: Brain, delay: 0.2 },
-  { icon: Shield, delay: 0.4 },
-  { icon: Network, delay: 0.6 },
-  { icon: BookOpen, delay: 0.8 },
-  { icon: Users, delay: 1 },
-  { icon: Globe, delay: 1.2 },
-  { icon: Zap, delay: 1.4 },
+  { icon: Bitcoin, delay: 0 },
+  { icon: Code2, delay: 0.2 },
+  { icon: Database, delay: 0.4 },
+  { icon: Globe2, delay: 0.6 },
+  { icon: Megaphone, delay: 0.8 },
+  { icon: Users, delay: 1 }
 ];
 
-const bioText = `As a multifaceted professional in the Web3 ecosystem, I focus on building secure foundations
-for the future of decentralized technology. My work spans across development, data science,
-and community building, all with the goal of creating sustainable value in the blockchain space.
-
-Through my role as a Web3 startup advisor and brand ambassador, I help projects establish
-robust security practices and long-term growth strategies. My expertise in data science
-enables me to identify emerging trends and opportunities, while my commitment to community
-building fosters collaboration and knowledge sharing within the ecosystem.
-
-As a host of Twitter Spaces (#SpacesHost), I facilitate meaningful discussions about
-Web3's future, bringing together thought leaders and innovators to explore solutions for
-securing digital assets and building sustainable blockchain infrastructure.
-
-My approach combines technical excellence with strategic vision, ensuring that every
-project and partnership contributes to a more secure and prosperous future in the Web3
-space. Through "The Network," I connect talented individuals with opportunities in
-blockchain development, helping to build strong teams that drive innovation forward.`;
-
 export default function About() {
-  const { theme } = useTheme();
-  const { scrollYProgress } = useScroll();
-  const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.2], [1, 0.8]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [displayedText, setDisplayedText] = useState('');
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [bioText, setBioText] = useState("");
+  const fullBio = "As a multifaceted professional in the Web3 space, I'm dedicated to building and securing the future of digital innovation. My approach combines technical expertise with strategic thinking, always focusing on sustainable growth and long-term value creation. Through my work as a data scientist, brand ambassador, and community leader, I help bridge the gap between complex blockchain technology and real-world applications, making Web3 more accessible and valuable for everyone. I actively mentor and advise Web3 startups, helping them navigate the complex landscape of blockchain technology, tokenomics, and community building. My experience in both technical and strategic aspects of Web3 enables me to provide comprehensive guidance to startups looking to make their mark in the decentralized future.";
 
   useEffect(() => {
-    // Simulate loading
-    setTimeout(() => setIsLoading(false), 1500);
+    let currentIndex = 0;
+    const interval = setInterval(() => {
+      if (currentIndex < fullBio.length) {
+        setBioText(prev => prev + fullBio[currentIndex]);
+        currentIndex++;
+      } else {
+        clearInterval(interval);
+      }
+    }, 30);
 
-    // Typing effect
-    if (currentIndex < bioText.length) {
-      const timer = setTimeout(() => {
-        setDisplayedText(prev => prev + bioText[currentIndex]);
-        setCurrentIndex(prev => prev + 1);
-      }, 30);
-      return () => clearTimeout(timer);
+    return () => clearInterval(interval);
+  }, []);
+
+  const expertiseCards = [
+    {
+      icon: <Bitcoin className="w-8 h-8 text-[#FF8C00]" />,
+      title: "Web3 Expert",
+      description: "Deep expertise in blockchain technology, DeFi, and Web3 startups, focusing on sustainable growth and long-term value creation."
+    },
+    {
+      icon: <Database className="w-8 h-8 text-[#FF8C00]" />,
+      title: "Data Scientist",
+      description: "Leveraging data analytics and machine learning to derive actionable insights and drive strategic decision-making in Web3."
+    },
+    {
+      icon: <Megaphone className="w-8 h-8 text-[#FF8C00]" />,
+      title: "Twitter Spaces Host",
+      description: "Hosting engaging discussions on Web3, blockchain, and future technologies, building communities and sharing knowledge."
+    },
+    {
+      icon: <Users className="w-8 h-8 text-[#FF8C00]" />,
+      title: "Brand Ambassador",
+      description: "Representing and advocating for innovative Web3 projects, helping them build strong communities and achieve their vision."
+    },
+    {
+      icon: <Globe2 className="w-8 h-8 text-[#FF8C00]" />,
+      title: "Digital Influencer",
+      description: "Shaping conversations around Web3 and blockchain technology, with a focus on education and long-term value."
+    },
+    {
+      icon: <Code2 className="w-8 h-8 text-[#FF8C00]" />,
+      title: "Technical Advisor",
+      description: "Providing strategic guidance to Web3 startups on technical implementation and ecosystem integration."
     }
-  }, [currentIndex]);
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-          className={`text-[#FF8C00]`}
-        >
-          <Loader2 className="w-12 h-12" />
-        </motion.div>
-      </div>
-    );
-  }
+  ];
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className={`absolute inset-0 bg-gradient-to-br ${
-          theme === 'dark' 
-            ? 'from-[#1A0F0F] via-[#2A1B1B] to-[#3A2B1B]' 
-            : 'from-gray-50 via-gray-100 to-gray-200'
-        }`} />
-        {/* Animated mesh gradient */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1 }}
-          className="absolute inset-0"
-        >
-          <div className={`absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,${
-            theme === 'dark' 
-              ? 'rgba(255,140,0,0.05)' 
-              : 'rgba(255,140,0,0.03)'
-          },transparent_50%)]`} />
-        </motion.div>
-        {/* Floating Icons */}
-        {floatingIcons.map((icon, index) => (
+    <div className="min-h-screen bg-white dark:bg-[#1A1A1A] text-gray-900 dark:text-white">
+      {/* Floating Icons Background */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        {floatingIcons.map((item, index) => (
           <motion.div
             key={index}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ 
-              opacity: [0, 1, 0],
-              y: [20, -20, 20],
+            className="absolute"
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{
+              opacity: [0, 0.3, 0],
+              scale: [0, 1.2, 0],
+              y: [0, -150, 0],
             }}
             transition={{
-              duration: 3,
+              duration: 10,
+              delay: item.delay,
               repeat: Infinity,
-              delay: icon.delay,
-              ease: "easeInOut"
+              ease: "linear"
             }}
-            className={`absolute ${
-              theme === 'dark' ? 'text-[#FF8C00]/20' : 'text-[#FF8C00]/10'
-            }`}
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
             }}
           >
-            <icon.icon className="w-8 h-8" />
+            <item.icon className="w-16 h-16 text-[#FF8C00]/30" />
           </motion.div>
         ))}
       </div>
 
-      {/* Content */}
-      <div className="container relative mx-auto px-4 py-16">
-        <div className="max-w-4xl mx-auto flex flex-col items-center">
-          {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-16 w-full"
-          >
-            {/* Logo */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="relative w-24 h-24 mx-auto mb-8"
-            >
-              <div className={`absolute inset-0 rounded-full ${
-                theme === 'dark' ? 'bg-[#FF8C00]/10' : 'bg-[#FF8C00]/5'
-              } blur-xl`} />
-              <div className={`absolute inset-0 rounded-full ${
-                theme === 'dark' ? 'bg-[#FF8C00]/5' : 'bg-[#FF8C00]/10'
-              } border-2 border-[#FF8C00]/20`} />
-              <div className="absolute inset-2 rounded-full overflow-hidden">
-                <Image
-                  src="/images/pfp.jpg"
-                  alt="Ola_Crrypt Logo"
-                  fill
-                  className="object-cover"
-                  priority
-                  loading="eager"
-                  unoptimized
-                  quality={100}
-                  onError={(e) => {
-                    console.error('Image loading error:', e);
-                  }}
-                />
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className={`inline-flex items-center gap-2 px-4 py-2 rounded-full ${
-                theme === 'dark'
-                  ? 'bg-[#FF8C00]/5 text-[#FF8C00] border-[#FF8C00]/10'
-                  : 'bg-[#FF8C00]/10 text-[#FF8C00] border-[#FF8C00]/20'
-              } border mb-6`}
-            >
-              <span className="text-sm font-medium">Securing the Future</span>
-            </motion.div>
-            <h1 className={`text-4xl md:text-5xl font-bold mb-6 ${
-              theme === 'dark' ? 'text-white' : 'text-gray-900'
-            }`}>
-              About{' '}
-              <span className="relative inline-block">
-                <span className="text-red-500">O</span>
-                <span className="text-[#FF8C00]">la_Crrypt</span>
-                <span className={`absolute inset-0 blur-sm ${
-                  theme === 'dark' ? 'text-[#FF8C00]/30' : 'text-[#FF8C00]/20'
-                }`}>
-                  Ola_Crrypt
-                </span>
-              </span>
-            </h1>
-            <p className={`text-xl ${
-              theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
-            }`}>
-              Web3 Innovator, Data Scientist, and Community Builder
-            </p>
-          </motion.div>
-
-          {/* Bio */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className={`prose prose-lg mx-auto mb-16 ${
-              theme === 'dark' ? 'prose-invert' : ''
-            } max-w-3xl text-center`}
-          >
-            <div className="whitespace-pre-line">
-              {displayedText}
-            </div>
-          </motion.div>
-
-          {/* Achievements */}
-          <motion.div
+      <div className="relative py-16 px-4 sm:px-6 lg:px-8 z-10">
+        {/* Hero Section */}
+        <motion.div 
+          className="max-w-7xl mx-auto text-center mb-16"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <motion.h1 
+            className="text-4xl sm:text-5xl font-bold mb-6 relative inline-block"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16 w-full"
           >
-            {achievements.map((achievement, index) => (
-              <motion.div
-                key={achievement.title}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 * (index + 1) }}
-                whileHover={{ scale: 1.05, y: -5 }}
-                className={`p-4 rounded-xl backdrop-blur-sm ${
-                  theme === 'dark'
-                    ? 'bg-white/5 border border-white/10 hover:border-[#FF8C00]/20 hover:bg-[#FF8C00]/5'
-                    : 'bg-white border-gray-200 hover:border-[#FF8C00]/30 hover:bg-[#FF8C00]/5'
-                } border transition-all duration-300 hover:shadow-lg hover:shadow-[#FF8C00]/10`}
-              >
-                <div className="text-2xl font-bold text-[#FF8C00] mb-1">
-                  {achievement.count}
-                </div>
-                <div className={`text-sm font-medium mb-1 ${
-                  theme === 'dark' ? 'text-white' : 'text-gray-900'
-                }`}>
-                  {achievement.title}
-                </div>
-                <div className={`text-xs ${
-                  theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-                }`}>
-                  {achievement.description}
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          {/* Skills Grid */}
-          <motion.div
+            <span className="text-red-500">O</span>
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF8C00] via-[#FFA500] to-[#FF6B00]">
+              la_Crrypt
+            </span>
+          </motion.h1>
+          <motion.p 
+            className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full"
+            transition={{ duration: 0.5, delay: 0.4 }}
           >
-            {skills.map((skill, index) => (
+            Securing the future through Web3 innovation, data-driven insights, and community building.
+          </motion.p>
+        </motion.div>
+
+        {/* Profile Section */}
+        <motion.div 
+          className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 mb-20"
+          variants={staggerContainer}
+          initial="initial"
+          animate="animate"
+        >
+          <motion.div 
+            className="relative w-[300px] h-[300px] mx-auto"
+            variants={fadeInUp}
+          >
+            <div className="absolute -inset-4 rounded-full bg-gradient-to-r from-[#FF8C00] to-[#FFA500] animate-pulse blur-2xl opacity-30"></div>
+            <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-[#FF8C00] to-[#FFA500] animate-pulse blur-xl opacity-20"></div>
+            <div className="relative w-full h-full rounded-full overflow-hidden shadow-xl ring-4 ring-[#FF8C00]/20">
+              <Image
+                src="/images/pfp.jpg"
+                alt="Ola_Crrypt"
+                fill
+                className="object-cover"
+              />
+            </div>
+          </motion.div>
+          <motion.div 
+            className="flex flex-col justify-center"
+            variants={fadeInUp}
+          >
+            <motion.h2 
+              className="text-3xl font-bold mb-6 text-[#FF8C00]"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.6 }}
+            >
+              The Vision
+            </motion.h2>
+            <div className="text-gray-600 dark:text-gray-300">
+              <span className="inline-block">{bioText}</span>
+              <span className="inline-block w-1 h-5 bg-[#FF8C00] ml-1 animate-blink"></span>
+            </div>
+          </motion.div>
+        </motion.div>
+
+        {/* Expertise Cards */}
+        <motion.div 
+          className="max-w-7xl mx-auto"
+          variants={staggerContainer}
+          initial="initial"
+          animate="animate"
+        >
+          <motion.h2 
+            className="text-3xl font-bold text-center mb-12 text-[#FF8C00]"
+            variants={fadeInUp}
+          >
+            Areas of Expertise
+          </motion.h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {expertiseCards.map((card, index) => (
               <motion.div
-                key={skill.name}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 * (index + 1) }}
-                whileHover={{ scale: 1.02, y: -5 }}
-                className={`group p-6 rounded-2xl ${
-                  theme === 'dark'
-                    ? 'bg-white/5 border-white/10 hover:border-[#FF8C00]/20 hover:bg-[#FF8C00]/5'
-                    : 'bg-white border-gray-200 hover:border-[#FF8C00]/30 hover:bg-[#FF8C00]/5'
-                } border transition-all duration-300 hover:shadow-lg hover:shadow-[#FF8C00]/10 backdrop-blur-sm`}
+                key={index}
+                variants={fadeInUp}
+                className="p-6 rounded-xl bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-gray-700 group hover:border-[#FF8C00] dark:hover:border-[#FF8C00] hover:-translate-y-1"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
-                <motion.div
-                  animate={{ rotate: [0, 10, 0] }}
-                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                <motion.div 
+                  className="mb-4 transform group-hover:scale-110 transition-transform duration-300"
+                  whileHover={{ rotate: 360 }}
+                  transition={{ duration: 0.5 }}
                 >
-                  <skill.icon className={`w-8 h-8 mb-4 ${
-                    theme === 'dark' ? 'text-[#FF8C00]' : 'text-[#FF8C00]'
-                  }`} />
+                  {card.icon}
                 </motion.div>
-                <h3 className={`text-xl font-semibold mb-2 ${
-                  theme === 'dark' ? 'text-white' : 'text-gray-900'
-                }`}>
-                  {skill.name}
-                </h3>
-                <p className={`${
-                  theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
-                }`}>
-                  {skill.description}
-                </p>
+                <motion.h3 
+                  className="text-xl font-bold mb-3 text-gray-900 dark:text-white group-hover:text-[#FF8C00] transition-colors duration-300"
+                  whileHover={{ x: 5 }}
+                >
+                  {card.title}
+                </motion.h3>
+                <motion.p 
+                  className="text-gray-600 dark:text-gray-300"
+                  whileHover={{ x: 5 }}
+                >
+                  {card.description}
+                </motion.p>
               </motion.div>
             ))}
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
       </div>
-    </section>
+    </div>
   );
 } 

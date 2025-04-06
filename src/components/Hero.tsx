@@ -1,14 +1,13 @@
 'use client';
 
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { useTheme } from '@/context/ThemeContext';
 import { ArrowRight, Twitter, Linkedin, Github, Sparkles, Coins, Network, Lock, Globe, Zap, Shield, Brain, Rocket, Users, X, CalendarDays, BookOpen, MessageSquare } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
 // Floating element component
-const FloatingElement = ({ x, y, size, delay, icon: Icon, theme }: { x: number; y: number; size: number; delay: number; icon: any; theme: string }) => (
+const FloatingElement = ({ x, y, size, delay, icon: Icon }: { x: number; y: number; size: number; delay: number; icon: any }) => (
   <motion.div
     initial={{ opacity: 0, scale: 0 }}
     animate={{ 
@@ -26,23 +25,15 @@ const FloatingElement = ({ x, y, size, delay, icon: Icon, theme }: { x: number; 
     className="absolute"
     style={{ left: `${x}%`, top: `${y}%` }}
   >
-    <Icon className={`w-${size} h-${size} ${
-      theme === 'dark' 
-        ? 'text-[#FF8C00]/40 drop-shadow-[0_0_12px_rgba(255,140,0,0.4)]' 
-        : 'text-[#FF8C00]/50 drop-shadow-[0_0_16px_rgba(255,140,0,0.5)]'
-    }`} />
+    <Icon className={`w-${size} h-${size} text-[#FF8C00]/40 dark:text-[#FF8C00]/50 drop-shadow-[0_0_12px_rgba(255,140,0,0.4)] dark:drop-shadow-[0_0_16px_rgba(255,140,0,0.5)]`} />
   </motion.div>
 );
 
 // Animated gradient background
-const GradientBackground = ({ theme }: { theme: string }) => (
+const GradientBackground = () => (
   <div className="absolute inset-0 overflow-hidden">
     {/* Base gradient */}
-    <div className={`absolute inset-0 bg-gradient-to-br ${
-      theme === 'dark' 
-        ? 'from-[#1A0F0F] via-[#2A1B1B] to-[#3A2B1B]' 
-        : 'from-white via-gray-50/80 to-gray-100/80'
-    }`} />
+    <div className="absolute inset-0 bg-gradient-to-br from-white via-gray-50/80 to-gray-100/80 dark:from-[#1A0F0F] dark:via-[#2A1B1B] dark:to-[#3A2B1B]" />
 
     {/* Animated mesh gradient */}
     <motion.div
@@ -51,17 +42,13 @@ const GradientBackground = ({ theme }: { theme: string }) => (
       transition={{ duration: 1 }}
       className="absolute inset-0"
     >
-      <div className={`absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,${
-        theme === 'dark' 
-          ? 'rgba(255,140,0,0.05)' 
-          : 'rgba(255,140,0,0.03)'
-      },transparent_50%)]`} />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,140,0,0.03),transparent_50%)] dark:bg-[radial-gradient(circle_at_50%_50%,rgba(255,140,0,0.05),transparent_50%)]" />
       <motion.div
         animate={{
           background: [
-            `radial-gradient(circle at 0% 0%, ${theme === 'dark' ? 'rgba(255,140,0,0.05)' : 'rgba(255,140,0,0.03)'}, transparent 50%)`,
-            `radial-gradient(circle at 100% 100%, ${theme === 'dark' ? 'rgba(255,140,0,0.05)' : 'rgba(255,140,0,0.03)'}, transparent 50%)`,
-            `radial-gradient(circle at 0% 0%, ${theme === 'dark' ? 'rgba(255,140,0,0.05)' : 'rgba(255,140,0,0.03)'}, transparent 50%)`,
+            'radial-gradient(circle at 0% 0%, rgba(255,140,0,0.03), transparent 50%)',
+            'radial-gradient(circle at 100% 100%, rgba(255,140,0,0.03), transparent 50%)',
+            'radial-gradient(circle at 0% 0%, rgba(255,140,0,0.03), transparent 50%)',
           ],
         }}
         transition={{
@@ -69,7 +56,22 @@ const GradientBackground = ({ theme }: { theme: string }) => (
           repeat: Infinity,
           ease: "linear"
         }}
-        className="absolute inset-0"
+        className="absolute inset-0 dark:hidden"
+      />
+      <motion.div
+        animate={{
+          background: [
+            'radial-gradient(circle at 0% 0%, rgba(255,140,0,0.05), transparent 50%)',
+            'radial-gradient(circle at 100% 100%, rgba(255,140,0,0.05), transparent 50%)',
+            'radial-gradient(circle at 0% 0%, rgba(255,140,0,0.05), transparent 50%)',
+          ],
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          ease: "linear"
+        }}
+        className="absolute inset-0 hidden dark:block"
       />
     </motion.div>
 
@@ -78,15 +80,7 @@ const GradientBackground = ({ theme }: { theme: string }) => (
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
-      className={`absolute inset-0 bg-[linear-gradient(to_right,${
-        theme === 'dark' 
-          ? '#80808002_1px,transparent_1px' 
-          : '#80808001_1px,transparent_1px'
-      }),linear-gradient(to_bottom,${
-        theme === 'dark' 
-          ? '#80808002_1px,transparent_1px' 
-          : '#80808001_1px,transparent_1px'
-      })] bg-[size:24px_24px]`}
+      className="absolute inset-0 bg-[linear-gradient(to_right,#80808001_1px,transparent_1px),linear-gradient(to_bottom,#80808001_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#80808002_1px,transparent_1px),linear-gradient(to_bottom,#80808002_1px,transparent_1px)] bg-[size:24px_24px]"
     >
       <motion.div
         animate={{
@@ -112,11 +106,7 @@ const GradientBackground = ({ theme }: { theme: string }) => (
         repeat: Infinity,
         ease: "easeInOut"
       }}
-      className={`absolute w-96 h-96 rounded-full ${
-        theme === 'dark'
-          ? 'bg-[#FF8C00]/5 blur-3xl'
-          : 'bg-[#FF8C00]/3 blur-2xl'
-      }`}
+      className={`absolute w-96 h-96 rounded-full bg-[#FF8C00]/3 blur-2xl`}
       style={{ top: '20%', left: '20%' }}
     />
     <motion.div
@@ -129,44 +119,10 @@ const GradientBackground = ({ theme }: { theme: string }) => (
         repeat: Infinity,
         ease: "easeInOut"
       }}
-      className={`absolute w-96 h-96 rounded-full ${
-        theme === 'dark'
-          ? 'bg-[#FFA500]/5 blur-3xl'
-          : 'bg-[#FFA500]/3 blur-2xl'
-      }`}
+      className={`absolute w-96 h-96 rounded-full bg-[#FFA500]/3 blur-2xl`}
       style={{ top: '60%', left: '60%' }}
     />
   </div>
-);
-
-// Add floating particles
-const FloatingParticle = ({ x, y, size, delay, theme }: { x: number; y: number; size: number; delay: number; theme: string }) => (
-  <motion.div
-    initial={{ opacity: 0, scale: 0 }}
-    animate={{ 
-      opacity: [0.1, 0.3, 0.1],
-      scale: [1, 1.2, 1],
-      y: [0, -20, 0],
-      x: [0, 10, 0],
-    }}
-    transition={{ 
-      duration: 4,
-      delay,
-      repeat: Infinity,
-      ease: "easeInOut"
-    }}
-    className={`absolute rounded-full ${
-      theme === 'dark'
-        ? 'bg-[#FF8C00]/10 blur-sm'
-        : 'bg-[#FF8C00]/5 blur-sm'
-    }`}
-    style={{ 
-      left: `${x}%`, 
-      top: `${y}%`,
-      width: `${size}px`,
-      height: `${size}px`
-    }}
-  />
 );
 
 // Generate random particles
@@ -249,31 +205,23 @@ const TypingText = ({ text, className }: { text: string; className: string }) =>
 };
 
 // Add loading state component
-const LoadingState = ({ theme }: { theme: string }) => (
+const LoadingState = () => (
   <div className="absolute inset-0 flex items-center justify-center">
     <div className="relative">
-      <div className={`w-16 h-16 rounded-full border-4 ${
-        theme === 'dark' ? 'border-[#FF8C00]/20' : 'border-[#FF8C00]/30'
-      }`}>
+      <div className="w-16 h-16 rounded-full border-4 border-[#FF8C00]/20">
         <div className="absolute inset-0 rounded-full border-4 border-[#FF8C00] border-t-transparent animate-spin" />
       </div>
-      <div className={`absolute inset-0 rounded-full border-4 ${
-        theme === 'dark' ? 'border-[#FF8C00]/10' : 'border-[#FF8C00]/20'
-      } animate-pulse`} />
+      <div className="absolute inset-0 rounded-full border-4 border-[#FF8C00]/10 animate-pulse" />
     </div>
   </div>
 );
 
 // Add network error state component
-const NetworkError = ({ theme }: { theme: string }) => (
+const NetworkError = () => (
   <div className="absolute inset-0 flex items-center justify-center">
-    <div className={`p-6 rounded-2xl ${
-      theme === 'dark' ? 'bg-white/5' : 'bg-white/90'
-    } border ${
-      theme === 'dark' ? 'border-[#FF8C00]/20' : 'border-[#FF8C00]/30'
-    } backdrop-blur-sm`}>
+    <div className="p-6 rounded-2xl bg-white/5 border border-[#FF8C00]/20 backdrop-blur-sm">
       <div className="text-[#FF8C00] text-xl font-semibold mb-2">Network Error</div>
-      <div className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+      <div className="text-sm text-gray-600">
         Please check your connection and try again
       </div>
     </div>
@@ -332,22 +280,22 @@ const AnimatedButton = ({ children, href, variant = 'primary' }: { children: Rea
 };
 
 export default function Hero() {
-  const { theme } = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll();
   const [isHovered, setIsHovered] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const y = useTransform(scrollY, [0, 500], [0, 100]);
   const [isExploreOpen, setIsExploreOpen] = useState(false);
   const exploreRef = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
+  const [isDark, setIsDark] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Simulate loading and network states
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
-    return () => clearTimeout(timer);
+    setMounted(true);
+    // Check system preference
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    setIsDark(prefersDark);
   }, []);
 
   // Generate particles
@@ -377,11 +325,19 @@ export default function Hero() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  const toggleTheme = () => {
+    setIsDark(!isDark);
+    document.documentElement.classList.toggle('dark');
+  };
+
+  if (!mounted) {
+    return null;
+  }
+
   return (
-    <section ref={containerRef} className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 md:pt-24">
-      {/* Loading and Error States */}
-      {isLoading && <LoadingState theme={theme} />}
-      {hasError && <NetworkError theme={theme} />}
+    <div className="min-h-screen bg-white dark:bg-[#1A1A1A] text-gray-900 dark:text-white relative overflow-hidden">
+      {/* Remove LoadingState and only keep NetworkError */}
+      {hasError && <NetworkError />}
 
       {/* Background */}
       <motion.div 
@@ -390,7 +346,7 @@ export default function Hero() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
       >
-        <GradientBackground theme={theme} />
+        <GradientBackground />
       </motion.div>
 
       {/* Floating Elements */}
@@ -401,12 +357,12 @@ export default function Hero() {
         transition={{ duration: 0.8, delay: 0.2 }}
       >
         {floatingElements.map((element, index) => (
-          <FloatingElement key={index} {...element} theme={theme} />
+          <FloatingElement key={index} {...element} />
         ))}
       </motion.div>
 
       {/* Main Content */}
-      <div className="container relative mx-auto px-4 max-w-7xl">
+      <div className="container relative mx-auto px-4 max-w-7xl pt-16 md:pt-24">
         <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-8 md:gap-12">
           {/* Left content */}
           <motion.div 
@@ -420,11 +376,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className={`inline-flex items-center gap-2 px-4 py-2 rounded-full ${
-                theme === 'dark'
-                  ? 'bg-[#FF8C00]/5 text-[#FF8C00] border-[#FF8C00]/10 hover:bg-[#FF8C00]/10'
-                  : 'bg-[#FF8C00]/10 text-[#FF8C00] border-[#FF8C00]/20 hover:bg-[#FF8C00]/20'
-              } border transition-colors mb-4 md:mb-6`}
+              className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#FF8C00]/10 text-[#FF8C00] border-[#FF8C00]/20 hover:bg-[#FF8C00]/20 border transition-colors mb-4 md:mb-8`}
             >
               <Sparkles className="w-4 h-4" />
               <span className="text-sm font-medium">All about Securing My Future</span>
@@ -481,21 +433,20 @@ export default function Hero() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setIsExploreOpen(true)}
-                className="px-8 py-3 bg-[#FF8C00] text-white rounded-lg font-medium hover:bg-[#FF8C00]/90 transition-colors flex items-center gap-2 shadow-lg hover:shadow-[#FF8C00]/20"
+                className="px-8 py-3 bg-[#FF8C00] text-white rounded-lg font-medium hover:bg-[#FF8000] transition-colors flex items-center gap-2 shadow-lg hover:shadow-[#FF8000]/20"
               >
                 <Rocket className="w-5 h-5" />
                 Explore
               </motion.button>
-              <Link href="/network">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="px-8 py-3 bg-white/10 dark:bg-black/10 text-gray-900 dark:text-white rounded-lg font-medium hover:bg-white/20 dark:hover:bg-black/20 transition-colors flex items-center gap-2 backdrop-blur-sm border border-white/20 dark:border-black/20 shadow-lg hover:shadow-white/10 dark:hover:shadow-black/10"
-                >
-                  <Users className="w-5 h-5" />
-                  Join Network
-                </motion.button>
-              </Link>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-8 py-3 bg-white/10 dark:bg-black/10 text-gray-900 dark:text-white rounded-lg font-medium hover:bg-white/20 dark:hover:bg-black/20 transition-colors flex items-center gap-2 backdrop-blur-sm border border-white/20 dark:border-black/20 shadow-lg hover:shadow-white/10 dark:hover:shadow-black/10 cursor-not-allowed opacity-50"
+              >
+                <Users className="w-5 h-5" />
+                Join Network
+                <span className="text-xs bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-full">Coming Soon</span>
+              </motion.button>
             </div>
 
             {/* Stats Section */}
@@ -507,11 +458,7 @@ export default function Hero() {
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ duration: 0.5 }}
                   whileHover={{ scale: 1.05, y: -5 }}
-                  className={`p-4 rounded-xl backdrop-blur-sm ${
-                    theme === 'dark'
-                      ? 'bg-white/5 border border-white/10'
-                      : 'bg-black/5 border border-black/10'
-                  }`}
+                  className={`p-4 rounded-xl backdrop-blur-sm bg-white/5 border border-white/10`}
                 >
                   <motion.div 
                     className="text-2xl font-bold text-[#FF8C00]"
@@ -520,7 +467,7 @@ export default function Hero() {
                   >
                     66.5K+
                   </motion.div>
-                  <div className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
+                  <div className={`text-sm text-gray-400`}>
                     Community
                   </div>
                 </motion.div>
@@ -531,11 +478,7 @@ export default function Hero() {
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ duration: 0.5, delay: 0.1 }}
                   whileHover={{ scale: 1.05, y: -5 }}
-                  className={`p-4 rounded-xl backdrop-blur-sm ${
-                    theme === 'dark'
-                      ? 'bg-white/5 border border-white/10'
-                      : 'bg-black/5 border border-black/10'
-                  }`}
+                  className={`p-4 rounded-xl backdrop-blur-sm bg-white/5 border border-white/10`}
                 >
                   <motion.div 
                     className="text-2xl font-bold text-[#FF8C00]"
@@ -544,7 +487,7 @@ export default function Hero() {
                   >
                     700+
                   </motion.div>
-                  <div className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
+                  <div className={`text-sm text-gray-400`}>
                     Connections
                   </div>
                 </motion.div>
@@ -555,11 +498,7 @@ export default function Hero() {
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ duration: 0.5, delay: 0.2 }}
                   whileHover={{ scale: 1.05, y: -5 }}
-                  className={`p-4 rounded-xl backdrop-blur-sm ${
-                    theme === 'dark'
-                      ? 'bg-white/5 border border-white/10'
-                      : 'bg-black/5 border border-black/10'
-                  }`}
+                  className={`p-4 rounded-xl backdrop-blur-sm bg-white/5 border border-white/10`}
                 >
                   <motion.div 
                     className="text-2xl font-bold text-[#FF8C00]"
@@ -568,7 +507,7 @@ export default function Hero() {
                   >
                     100+
                   </motion.div>
-                  <div className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
+                  <div className={`text-sm text-gray-400`}>
                     Projects
                   </div>
                 </motion.div>
@@ -579,11 +518,7 @@ export default function Hero() {
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ duration: 0.5, delay: 0.3 }}
                   whileHover={{ scale: 1.05, y: -5 }}
-                  className={`p-4 rounded-xl backdrop-blur-sm ${
-                    theme === 'dark'
-                      ? 'bg-white/5 border border-white/10'
-                      : 'bg-black/5 border border-black/10'
-                  }`}
+                  className={`p-4 rounded-xl backdrop-blur-sm bg-white/5 border border-white/10`}
                 >
                   <motion.div 
                     className="text-2xl font-bold text-[#FF8C00]"
@@ -592,7 +527,7 @@ export default function Hero() {
                   >
                     50+
                   </motion.div>
-                  <div className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
+                  <div className={`text-sm text-gray-400`}>
                     Articles
                   </div>
                 </motion.div>
@@ -621,7 +556,7 @@ export default function Hero() {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="relative mb-8 md:mb-0 flex-shrink-0"
+            className="relative mt-16 md:mt-0 mb-8 md:mb-0 flex-shrink-0"
           >
             <div className="relative w-72 h-72 md:w-96 md:h-96">
               {/* Outer glow ring */}
@@ -714,9 +649,7 @@ export default function Hero() {
         className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
       >
         <motion.div 
-          className={`w-6 h-10 border-2 ${
-            theme === 'dark' ? 'border-[#FF8C00]/20' : 'border-[#FF8C00]/30'
-          } rounded-full flex justify-center`}
+          className={`w-6 h-10 border-2 border-[#FF8C00]/20 rounded-full flex justify-center`}
           animate={{
             scale: [1, 1.1, 1],
             opacity: [0.5, 1, 0.5],
@@ -786,41 +719,26 @@ export default function Hero() {
                     <p className="text-sm text-gray-500 dark:text-gray-400">Learn more about us</p>
                   </motion.div>
                 </Link>
-                <Link href="/network">
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    className="p-4 rounded-xl bg-white/5 dark:bg-black/5 hover:bg-[#FF8C00]/5 transition-colors cursor-pointer"
-                  >
-                    <Globe className="w-8 h-8 text-[#FF8C00] mb-2" />
-                    <h4 className="font-medium">Network</h4>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Join our community</p>
-                  </motion.div>
-                </Link>
-                <Link href="/events">
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    className="p-4 rounded-xl bg-white/5 dark:bg-black/5 hover:bg-[#FF8C00]/5 transition-colors cursor-pointer"
-                  >
-                    <CalendarDays className="w-8 h-8 text-[#FF8C00] mb-2" />
-                    <h4 className="font-medium">Events</h4>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Upcoming gatherings</p>
-                  </motion.div>
-                </Link>
-                <Link href="/insights">
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    className="p-4 rounded-xl bg-white/5 dark:bg-black/5 hover:bg-[#FF8C00]/5 transition-colors cursor-pointer"
-                  >
-                    <BookOpen className="w-8 h-8 text-[#FF8C00] mb-2" />
-                    <h4 className="font-medium">Insights</h4>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Latest articles</p>
-                  </motion.div>
-                </Link>
+                <div className="p-4 rounded-xl bg-white/5 dark:bg-black/5 cursor-not-allowed opacity-50">
+                  <Globe className="w-8 h-8 text-[#FF8C00] mb-2" />
+                  <h4 className="font-medium">Network</h4>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Coming Soon</p>
+                </div>
+                <div className="p-4 rounded-xl bg-white/5 dark:bg-black/5 cursor-not-allowed opacity-50">
+                  <CalendarDays className="w-8 h-8 text-[#FF8C00] mb-2" />
+                  <h4 className="font-medium">Events</h4>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Coming Soon</p>
+                </div>
+                <div className="p-4 rounded-xl bg-white/5 dark:bg-black/5 cursor-not-allowed opacity-50">
+                  <BookOpen className="w-8 h-8 text-[#FF8C00] mb-2" />
+                  <h4 className="font-medium">Insights</h4>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Coming Soon</p>
+                </div>
               </div>
             </motion.div>
           </div>
         )}
       </AnimatePresence>
-    </section>
+    </div>
   );
 } ;

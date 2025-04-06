@@ -1,297 +1,191 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme } from '@/context/ThemeContext';
-import { 
-  Sun, 
-  Moon, 
-  Menu, 
-  Home,
-  BookOpen,
-  Users,
-  Mail,
-  Settings,
-  X,
-  Globe,
-  CalendarDays,
-  MessageSquare
-} from 'lucide-react';
-import { usePathname } from 'next/navigation';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  Menu, 
+  X, 
+  Sun, 
+  Moon,
+  Home,
+  User,
+  Users,
+  CalendarDays,
+  BookOpen,
+  MessageSquare,
+  Trophy,
+  Sparkles
+} from 'lucide-react';
+import { colors } from '@/styles/colors';
 
-const navItems = [
+// Navigation items
+const navigationItems = [
   { name: 'Home', href: '/', icon: Home },
-  { name: 'About', href: '/about', icon: Users },
-  { name: 'Portfolio', href: '/portfolio', icon: BookOpen },
-  { name: 'Network', href: '/network', icon: Globe },
-  { name: 'Events', href: '/events', icon: CalendarDays },
-  { name: 'Insights', href: '/insights', icon: BookOpen },
+  { name: 'About', href: '/about', icon: User },
+  { name: 'Network', href: '/network', icon: Users, disabled: true },
+  { name: 'Events', href: '/events', icon: CalendarDays, disabled: true },
+  { name: 'Insights', href: '/insights', icon: BookOpen, disabled: true },
+  { name: 'Achievements', href: '/achievements', icon: Trophy, disabled: true },
   { name: 'Contact', href: '/contact', icon: MessageSquare },
 ];
 
 export default function Navigation() {
-  const { theme, toggleTheme, isInitialized } = useTheme();
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isDark, setIsDark] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
 
-  if (!isInitialized) {
-    return null;
-  }
-
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    setMounted(true);
+    // Check local storage first, then system preference
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      setIsDark(savedTheme === 'dark');
+    } else {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setIsDark(prefersDark);
+    }
   }, []);
 
-  // Prevent body scroll when mobile menu is open
   useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
+    if (mounted) {
+      // Update document class and local storage
+      if (isDark) {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+      }
     }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [isMobileMenuOpen]);
+  }, [isDark, mounted]);
+
+  const toggleTheme = () => {
+    setIsDark(!isDark);
+  };
+
+  if (!mounted) return null;
 
   return (
-    <motion.header
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5 }}
-      className={`fixed top-0 left-0 right-0 z-50 ${
-        isScrolled || theme === 'light'
-          ? theme === 'dark'
-            ? 'bg-dark/80 backdrop-blur-md border-b border-border/50'
-            : 'bg-white/80 backdrop-blur-md border-b border-gray-200'
-          : 'bg-transparent'
-      } transition-all duration-300`}
-    >
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-[#1A1A1A]/80 backdrop-blur-lg border-b border-gray-200 dark:border-[#2A2A2A] transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex justify-between h-16">
           {/* Logo */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-            className="flex-shrink-0"
-          >
-            <a href="/" className="flex items-center">
-              <span className="relative">
-                <span className="absolute inset-0 bg-[#FF8C00] blur-2xl opacity-20 animate-pulse" />
-                <span className="relative inline-flex items-center">
-                  <span className="text-red-500 text-lg">O</span>
-                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF8C00] via-[#FFA500] to-[#FF6B00] text-lg">la_Crrypt</span>
-                  <motion.span
-                    className="ml-1 text-[#FF8C00] text-lg"
-                    initial={{ opacity: 0, scale: 0 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5, delay: 0.3 }}
-                  >
-                    ₿
-                  </motion.span>
+          <div className="flex-shrink-0 flex items-center relative">
+            <Link href="/" className="flex items-center relative z-10">
+              <span className="text-2xl font-bold relative">
+                <span className="text-red-500">O</span>
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF8C00] via-[#FFA500] to-[#FF6B00] animate-pulse">
+                  la_Crrypt
                 </span>
+                <span className="absolute inset-0 blur-sm bg-gradient-to-r from-[#FF8C00]/20 via-[#FFA500]/20 to-[#FF6B00]/20 animate-pulse pointer-events-none"></span>
               </span>
-            </a>
-          </motion.div>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
-            <Link 
-              href="/" 
-              className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-[#FF8C00] ${
-                pathname === '/' ? 'text-[#FF8C00] border-b-2 border-[#FF8C00]' : 'text-gray-600 dark:text-gray-300'
-              }`}
-            >
-              <Home className="w-5 h-5" />
-              Home
-            </Link>
-            <Link 
-              href="/about" 
-              className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-[#FF8C00] ${
-                pathname === '/about' ? 'text-[#FF8C00] border-b-2 border-[#FF8C00]' : 'text-gray-600 dark:text-gray-300'
-              }`}
-            >
-              <Users className="w-5 h-5" />
-              About
-            </Link>
-            <Link 
-              href="/network" 
-              className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-[#FF8C00] ${
-                pathname === '/network' ? 'text-[#FF8C00] border-b-2 border-[#FF8C00]' : 'text-gray-600 dark:text-gray-300'
-              }`}
-            >
-              <Globe className="w-5 h-5" />
-              Network
-            </Link>
-            <Link 
-              href="/events" 
-              className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-[#FF8C00] ${
-                pathname === '/events' ? 'text-[#FF8C00] border-b-2 border-[#FF8C00]' : 'text-gray-600 dark:text-gray-300'
-              }`}
-            >
-              <CalendarDays className="w-5 h-5" />
-              Events
-            </Link>
-            <Link 
-              href="/insights" 
-              className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-[#FF8C00] ${
-                pathname === '/insights' ? 'text-[#FF8C00] border-b-2 border-[#FF8C00]' : 'text-gray-600 dark:text-gray-300'
-              }`}
-            >
-              <BookOpen className="w-5 h-5" />
-              Insights
-            </Link>
-            <Link 
-              href="/contact" 
-              className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-[#FF8C00] ${
-                pathname === '/contact' ? 'text-[#FF8C00] border-b-2 border-[#FF8C00]' : 'text-gray-600 dark:text-gray-300'
-              }`}
-            >
-              <MessageSquare className="w-5 h-5" />
-              Contact
             </Link>
           </div>
 
-          {/* Theme Toggle */}
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={toggleTheme}
-            className={`p-2.5 rounded-full ${
-              theme === 'dark'
-                ? 'bg-[#FF8C00]/5 text-[#FF8C00] hover:bg-[#FF8C00]/10'
-                : 'bg-[#FF8C00]/5 text-[#FF8C00] hover:bg-[#FF8C00]/10'
-            } transition-colors`}
-          >
-            {theme === 'dark' ? <Sun className="w-6 h-6" /> : <Moon className="w-6 h-6" />}
-          </motion.button>
-
-          {/* Mobile Menu Button */}
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className={`md:hidden p-1.5 rounded-full ${
-              theme === 'dark'
-                ? 'text-gray-300 hover:text-[#FF8C00]'
-                : 'text-gray-600 hover:text-[#FF8C00]'
-            } transition-colors`}
-          >
-            <Menu className="w-5 h-5" />
-          </motion.button>
-        </div>
-
-        {/* Mobile Menu */}
-        <AnimatePresence>
-          {isMobileMenuOpen && (
-            <div className="fixed inset-0 z-[9999]">
-              {/* Backdrop */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="fixed inset-0 bg-black/90 backdrop-blur-xl"
-                onClick={() => setIsMobileMenuOpen(false)}
-              />
-              
-              {/* Menu Panel */}
-              <motion.div
-                initial={{ x: '100%' }}
-                animate={{ x: 0 }}
-                exit={{ x: '100%' }}
-                transition={{ type: 'spring', damping: 20 }}
-                className="fixed top-0 right-0 h-screen w-64 bg-white dark:bg-dark shadow-2xl border-l border-gray-200 dark:border-gray-800 flex flex-col"
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-8 relative z-10">
+            {navigationItems.map((item) => (
+              <Link
+                key={item.name}
+                href={item.disabled ? '#' : item.href}
+                className={`inline-flex items-center text-sm font-medium transition-colors relative ${
+                  item.disabled
+                    ? 'text-gray-400 dark:text-[#666666] cursor-not-allowed'
+                    : pathname === item.href
+                    ? 'text-[#FF8C00] border-b-2 border-[#FF8C00]'
+                    : 'text-gray-600 dark:text-[#CCCCCC] hover:text-[#FF8C00] dark:hover:text-[#FF8C00] hover:border-b-2 hover:border-[#FF8C00]'
+                }`}
               >
-                {/* Header */}
-                <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-dark">
-                  <Link href="/" className="text-2xl font-bold text-[#FF8C00]">
-                    OlaCrypt
-                  </Link>
-                  <button
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
-                  >
-                    <X className="w-6 h-6" />
-                  </button>
-                </div>
-                
-                {/* Navigation Items */}
-                <div className="flex-1 p-4 space-y-2 bg-white dark:bg-dark overflow-y-auto">
-                  {/* Mobile menu items */}
-                  <div className="flex flex-col gap-4">
-                    <Link 
-                      href="/" 
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className={`flex items-center gap-3 text-lg font-medium transition-colors hover:text-[#FF8C00] ${
-                        pathname === '/' ? 'text-[#FF8C00]' : 'text-gray-600 dark:text-gray-300'
-                      }`}
-                    >
-                      <Home className="w-6 h-6" />
-                      Home
-                    </Link>
-                    <Link 
-                      href="/about" 
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className={`flex items-center gap-3 text-lg font-medium transition-colors hover:text-[#FF8C00] ${
-                        pathname === '/about' ? 'text-[#FF8C00]' : 'text-gray-600 dark:text-gray-300'
-                      }`}
-                    >
-                      <Users className="w-6 h-6" />
-                      About
-                    </Link>
-                    <Link 
-                      href="/network" 
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className={`flex items-center gap-3 text-lg font-medium transition-colors hover:text-[#FF8C00] ${
-                        pathname === '/network' ? 'text-[#FF8C00]' : 'text-gray-600 dark:text-gray-300'
-                      }`}
-                    >
-                      <Globe className="w-6 h-6" />
-                      Network
-                    </Link>
-                    <Link 
-                      href="/events" 
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className={`flex items-center gap-3 text-lg font-medium transition-colors hover:text-[#FF8C00] ${
-                        pathname === '/events' ? 'text-[#FF8C00]' : 'text-gray-600 dark:text-gray-300'
-                      }`}
-                    >
-                      <CalendarDays className="w-6 h-6" />
-                      Events
-                    </Link>
-                    <Link 
-                      href="/insights" 
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className={`flex items-center gap-3 text-lg font-medium transition-colors hover:text-[#FF8C00] ${
-                        pathname === '/insights' ? 'text-[#FF8C00]' : 'text-gray-600 dark:text-gray-300'
-                      }`}
-                    >
-                      <BookOpen className="w-6 h-6" />
-                      Insights
-                    </Link>
-                    <Link 
-                      href="/contact" 
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className={`flex items-center gap-3 text-lg font-medium transition-colors hover:text-[#FF8C00] ${
-                        pathname === '/contact' ? 'text-[#FF8C00]' : 'text-gray-600 dark:text-gray-300'
-                      }`}
-                    >
-                      <MessageSquare className="w-6 h-6" />
-                      Contact
-                    </Link>
-                  </div>
-                </div>
-              </motion.div>
-            </div>
-          )}
-        </AnimatePresence>
+                <item.icon className="w-4 h-4 mr-1" />
+                {item.name}
+                {item.disabled && (
+                  <span className="ml-1 text-xs bg-[#FF8C00]/10 text-[#FF8C00] px-1.5 py-0.5 rounded-full">
+                    SOON
+                  </span>
+                )}
+              </Link>
+            ))}
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#2A2A2A] transition-colors relative"
+              aria-label="Toggle theme"
+            >
+              {isDark ? (
+                <Sun className="w-5 h-5 text-[#FF8C00]" />
+              ) : (
+                <Moon className="w-5 h-5 text-[#FF8C00]" />
+              )}
+            </button>
+          </div>
+
+          {/* Mobile menu button */}
+          <div className="md:hidden flex items-center space-x-4 relative z-10">
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#2A2A2A] transition-colors relative"
+              aria-label="Toggle theme"
+            >
+              {isDark ? (
+                <Sun className="w-5 h-5 text-[#FF8C00]" />
+              ) : (
+                <Moon className="w-5 h-5 text-[#FF8C00]" />
+              )}
+            </button>
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#2A2A2A] transition-colors relative"
+              aria-label="Toggle menu"
+            >
+              {isOpen ? (
+                <X className="w-6 h-6 text-gray-600 dark:text-[#CCCCCC]" />
+              ) : (
+                <Menu className="w-6 h-6 text-gray-600 dark:text-[#CCCCCC]" />
+              )}
+            </button>
+          </div>
+        </div>
       </div>
-    </motion.header>
+
+      {/* Mobile Navigation */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2 }}
+            className="md:hidden relative z-10"
+          >
+            <div className="px-2 pt-2 pb-3 space-y-1 bg-white dark:bg-[#1A1A1A] border-b border-gray-200 dark:border-[#2A2A2A]">
+              {navigationItems.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.disabled ? '#' : item.href}
+                  className={`flex items-center px-3 py-2 rounded-md text-base font-medium transition-colors relative ${
+                    item.disabled
+                      ? 'text-gray-400 dark:text-[#666666] cursor-not-allowed'
+                      : pathname === item.href
+                      ? 'text-[#FF8C00] bg-[#FF8C00]/10'
+                      : 'text-gray-600 dark:text-[#CCCCCC] hover:text-[#FF8C00] dark:hover:text-[#FF8C00] hover:bg-[#FF8C00]/5'
+                  }`}
+                  onClick={() => !item.disabled && setIsOpen(false)}
+                >
+                  <item.icon className="w-5 h-5 mr-3" />
+                  <span className="flex-1">{item.name}</span>
+                  {item.disabled && (
+                    <span className="text-xs bg-[#FF8C00]/10 text-[#FF8C00] px-2 py-0.5 rounded-full">
+                      SOON
+                    </span>
+                  )}
+                </Link>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </nav>
   );
 } 

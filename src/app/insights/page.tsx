@@ -1,270 +1,135 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme } from '@/context/ThemeContext';
-import { Search, Filter, BookOpen, TrendingUp, BarChart, Lightbulb, Clock, Bookmark, Share2, MessageSquare, Twitter, Gift, Rocket } from 'lucide-react';
-import { useState, useEffect } from 'react';
-import Loading from './loading';
-import Image from 'next/image';
-import { Calendar } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Bookmark, Share2, Tag } from 'lucide-react';
+import { useLoader } from '@/hooks/useLoader';
+import Loader from '@/components/Loader';
 
-// Types
-import { LucideIcon } from 'lucide-react';
-
-interface FloatingIconProps {
-  icon: LucideIcon;
-  delay?: number;
-  style?: React.CSSProperties;
+interface Article {
+  title: string;
+  description: string;
+  image: string;
+  date: string;
+  readTime: string;
+  category: string;
+  tags: string[];
 }
 
-// Mock data for insights
-const mockInsights = [
+const articles: Article[] = [
   {
-    id: '1',
-    title: 'The Future of Web3: A Data-Driven Analysis',
-    excerpt: 'An in-depth look at emerging trends in blockchain technology and their potential impact on the future of digital assets.',
-    category: 'Web3 & Blockchain',
+    title: 'Understanding Web3 Security',
+    description: 'A comprehensive guide to securing Web3 applications and smart contracts.',
+    image: '/images/article1.jpg',
     date: '2024-03-15',
-    readTime: '8 min read',
-    author: 'Ola_Crrypt',
-    thumbnail: '/images/web3-future.jpg',
-    featured: true,
-    tags: ['Web3', 'Blockchain', 'Future Tech', 'Analysis'],
-    type: 'article'
-  },
-  {
-    id: '2',
-    title: 'Building Sustainable Communities in Web3',
-    excerpt: 'Learn how to create and maintain engaged communities in the Web3 space through data-driven strategies and authentic engagement.',
-    category: 'Community Building',
-    date: '2024-03-10',
-    readTime: '6 min read',
-    author: 'Ola_Crrypt',
-    thumbnail: '/images/community-building.jpg',
-    featured: false,
-    tags: ['Community', 'Web3', 'Strategy', 'Growth'],
-    type: 'article'
-  },
-  {
-    id: '3',
-    title: 'Data Science in Blockchain: A New Frontier',
-    excerpt: 'Exploring the intersection of data science and blockchain technology, and how it\'s shaping the future of decentralized systems.',
-    category: 'Data Science',
-    date: '2024-03-05',
-    readTime: '10 min read',
-    author: 'Ola_Crrypt',
-    thumbnail: '/images/data-science.jpg',
-    featured: true,
-    tags: ['Data Science', 'Blockchain', 'Technology', 'Innovation'],
-    type: 'article'
-  },
-  {
-    id: '4',
-    title: '🚀 The Future of DeFi: A Thread',
-    excerpt: '1/10 Let\'s dive into the future of DeFi and how it\'s reshaping the financial landscape. From yield farming to governance, here\'s what\'s coming next...',
-    category: 'Twitter Thread',
-    date: '2024-03-12',
     readTime: '5 min read',
-    author: 'Ola_Crrypt',
-    thumbnail: '/images/defi-future.jpg',
-    featured: true,
-    tags: ['DeFi', 'Thread', 'Finance', 'Future'],
-    type: 'thread',
-    threadUrl: 'https://twitter.com/Ola_Crrypt/status/1234567890'
+    category: 'Security',
+    tags: ['Web3', 'Security', 'Smart Contracts']
   },
-  {
-    id: '5',
-    title: '🎁 Top Airdrops to Watch in 2024',
-    excerpt: 'A comprehensive guide to upcoming airdrops in the Web3 space, including eligibility criteria and potential rewards.',
-    category: 'Airdrops',
-    date: '2024-03-08',
-    readTime: '7 min read',
-    author: 'Ola_Crrypt',
-    thumbnail: '/images/airdrops.jpg',
-    featured: true,
-    tags: ['Airdrops', 'Web3', 'Rewards', 'Guide'],
-    type: 'article'
-  },
-  {
-    id: '6',
-    title: '💡 Web3 Startups to Watch',
-    excerpt: 'Discover promising Web3 startups that are innovating in DeFi, NFTs, and blockchain infrastructure.',
-    category: 'Startups',
-    date: '2024-03-03',
-    readTime: '6 min read',
-    author: 'Ola_Crrypt',
-    thumbnail: '/images/startups.jpg',
-    featured: false,
-    tags: ['Startups', 'Web3', 'Innovation', 'Investment'],
-    type: 'article'
-  }
+  // Add more articles as needed
 ];
-
-const categories = [
-  'All',
-  'Web3 & Blockchain',
-  'Data Science',
-  'Future Tech',
-  'Investment',
-  'Community Building',
-  'Personal Growth',
-  'Industry Trends',
-  'Twitter Thread',
-  'Airdrops',
-  'Startups'
-];
-
-// Floating icons component
-const FloatingIcon = ({ icon: Icon, delay = 0, style }: FloatingIconProps) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5, delay }}
-    className="absolute"
-    style={style}
-  >
-    <Icon className="w-6 h-6 text-[#FF8C00]" />
-  </motion.div>
-);
 
 export default function Insights() {
-  const { theme } = useTheme();
-  const [isLoading, setIsLoading] = useState(true);
-  const [activeCategory, setActiveCategory] = useState('All');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedInsight, setSelectedInsight] = useState<string | null>(null);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1500);
-    return () => clearTimeout(timer);
-  }, []);
-
-  const filteredInsights = mockInsights.filter(insight => {
-    const matchesCategory = activeCategory === 'All' || insight.category === activeCategory;
-    const matchesSearch = insight.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         insight.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         insight.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
-    return matchesCategory && matchesSearch;
+  const { isLoading, error, retry } = useLoader({
+    onLoad: async () => {
+      // Simulate loading articles data
+      await new Promise(resolve => setTimeout(resolve, 1500));
+    },
   });
 
   if (isLoading) {
-    return <Loading />;
+    return <Loader />;
+  }
+
+  if (error) {
+    return <Loader error={error} onRetry={retry} />;
   }
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-[#FF8C00]/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
-      </div>
+    <div className="min-h-screen bg-white dark:bg-[#1A1A1A] text-gray-900 dark:text-white pt-32 pb-16 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-16"
+        >
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">
+            <span className="text-red-500">O</span>
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF8C00] via-[#FFA500] to-[#FF6B00]">
+              la_Crrypt
+            </span>
+          </h1>
+          <p className="text-xl sm:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+            Insights
+          </p>
+        </motion.div>
 
-      {/* Floating Icons */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <FloatingIcon icon={Twitter} delay={0.2} style={{ top: '10%', left: '5%' }} />
-        <FloatingIcon icon={Gift} delay={0.4} style={{ top: '20%', right: '15%' }} />
-        <FloatingIcon icon={Rocket} delay={0.6} style={{ bottom: '30%', left: '20%' }} />
-        <FloatingIcon icon={BookOpen} delay={0.8} style={{ bottom: '20%', right: '10%' }} />
-        <FloatingIcon icon={TrendingUp} delay={1} style={{ top: '40%', left: '30%' }} />
-      </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {articles.map((article, index) => (
+            <motion.div
+              key={article.title}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 * index }}
+              className="bg-white dark:bg-[#2A2A2A] rounded-2xl shadow-lg overflow-hidden"
+            >
+              <div className="relative h-48">
+                <img
+                  src={article.image}
+                  alt={article.title}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                <div className="absolute bottom-4 left-4 right-4">
+                  <h3 className="text-xl font-semibold text-white">
+                    {article.title}
+                  </h3>
+                </div>
+              </div>
 
-      {/* Content */}
-      <div className="container relative mx-auto px-4 py-16">
-        <div className="max-w-7xl mx-auto">
-          {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-16"
-          >
-            <h1 className={`text-4xl md:text-5xl font-bold mb-6 ${
-              theme === 'dark' ? 'text-white' : 'text-gray-900'
-            }`}>
-              Web3 Insights
-            </h1>
-            <p className={`text-xl ${
-              theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
-            }`}>
-              Stay updated with the latest trends and analysis in the Web3 space
-            </p>
-          </motion.div>
-
-          {/* Insights Grid */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-          >
-            {filteredInsights.map((insight, index) => (
-              <motion.div
-                key={insight.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 * (index + 1) }}
-                whileHover={{ scale: 1.02, y: -5 }}
-                className={`p-6 rounded-2xl ${
-                  theme === 'dark'
-                    ? 'bg-white/5 border-white/10 hover:border-[#FF8C00]/20 hover:bg-[#FF8C00]/5'
-                    : 'bg-white border-gray-200 hover:border-[#FF8C00]/30 hover:bg-[#FF8C00]/5'
-                } border transition-all duration-300 hover:shadow-lg hover:shadow-[#FF8C00]/10 backdrop-blur-sm`}
-              >
-                <div className="relative w-full h-48 mb-4 rounded-lg overflow-hidden">
-                  <Image
-                    src={insight.thumbnail}
-                    alt={insight.title}
-                    fill
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                      theme === 'dark'
-                        ? 'bg-[#FF8C00] text-white'
-                        : 'bg-[#FF8C00] text-white'
-                    }`}>
-                      {insight.category}
-                    </span>
+              <div className="p-6">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
+                    <Clock className="w-4 h-4" />
+                    <span>{article.readTime}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
+                    <Tag className="w-4 h-4" />
+                    <span>{article.category}</span>
                   </div>
                 </div>
-                <h3 className={`text-xl font-semibold mb-2 ${
-                  theme === 'dark' ? 'text-white' : 'text-gray-900'
-                }`}>
-                  {insight.title}
-                </h3>
-                <p className={`mb-4 ${
-                  theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
-                }`}>
-                  {insight.excerpt}
+
+                <p className="text-gray-600 dark:text-gray-300 mb-4">
+                  {article.description}
                 </p>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Calendar className={`w-4 h-4 ${
-                      theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-                    }`} />
-                    <span className={`text-sm ${
-                      theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-                    }`}>
-                      {insight.date}
+
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {article.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="px-2 py-1 rounded-full text-xs bg-[#FF8C00]/10 text-[#FF8C00]"
+                    >
+                      {tag}
                     </span>
-                  </div>
-                  <button
-                    onClick={() => setSelectedInsight(insight.id)}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium ${
-                      theme === 'dark'
-                        ? 'bg-[#FF8C00] text-white hover:bg-[#FF8C00]/90'
-                        : 'bg-[#FF8C00] text-white hover:bg-[#FF8C00]/90'
-                    } transition-colors`}
-                  >
-                    Read More
-                  </button>
+                  ))}
                 </div>
-              </motion.div>
-            ))}
-          </motion.div>
+
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-600 dark:text-gray-300">
+                    {article.date}
+                  </span>
+                  <div className="flex items-center gap-4">
+                    <button className="text-gray-600 dark:text-gray-300 hover:text-[#FF8C00] transition-colors">
+                      <Bookmark className="w-4 h-4" />
+                    </button>
+                    <button className="text-gray-600 dark:text-gray-300 hover:text-[#FF8C00] transition-colors">
+                      <Share2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </div>
